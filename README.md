@@ -9,9 +9,9 @@ $ ./utils/build-script path/to/swiftc
 
 ## Result
 
-| variant | file path | size |
+| variant | file path | size (byte) |
 | :-      | :-        | :-:  |
-| -Onone | build/Onone/Example/SwiftyJSONExample | 273K |
-| -Onone + LTO | build/Onone-LTO/Example/SwiftyJSONExample | 225K |
-| -O | build/O/Example/SwiftyJSONExample | 282K |
-| -O + LTO | (compiler crashed) |  |
+| -Onone | build/Onone/Example/SwiftyJSONExample | 279920 |
+| -Onone + LTO | build/Onone-LTO/Example/SwiftyJSONExample | 230900 |
+| -O | build/O/Example/SwiftyJSONExample | 288384 |
+| -O + LTO | build/O-LTO/Example/SwiftyJSONExample | 230836 |
