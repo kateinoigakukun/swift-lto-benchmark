@@ -72,10 +72,6 @@ function(add_swift_lto_library name)
   set_target_properties(${name} PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}")
 
-  if(NOT LTO)
-    return()
-  endif()
-
   set(compile_options "-parse-as-library" $<$<CONFIG:Release>:"-O">)
   set(dependency_targets)
 
@@ -157,12 +153,6 @@ function(add_swift_lto_executable name)
     "" # single-value args
     "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
     ${ARGN})  
-
-  if(NOT LTO)
-    add_executable(${name} ${ASLE_SOURCES})
-    target_link_libraries(${name} ${ASLE_SWIFT_MODULE_DEPENDS})
-    return()
-  endif()
 
   _emit_swift_lto_intermediate_files(${name}
     SOURCES ${ASLE_SOURCES}
