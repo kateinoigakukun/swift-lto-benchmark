@@ -1,3 +1,6 @@
 [submodule "Example/third-party/SwiftyJSON"]
 	path = Example/third-party/SwiftyJSON
 	url = https://github.com/SwiftyJSON/SwiftyJSON.git
+[submodule "Example/third-party/swift-syntax"]
+	path = Example/third-party/swift-syntax
+	url = https://github.com/apple/swift-syntax.git
