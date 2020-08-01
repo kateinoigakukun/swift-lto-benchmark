@@ -6,4 +6,6 @@ list(APPEND CMAKE_MODULE_PATH
 project(swift-lto-benchmark
   LANGUAGES Swift)
 
+set(LTO TRUE CACHE BOOL "Link time optimization")
+
 add_subdirectory(Example)

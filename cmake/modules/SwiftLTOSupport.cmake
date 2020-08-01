@@ -66,7 +66,17 @@ function(add_swift_lto_library name)
     "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
     ${ARGN})
 
-  set(compile_options "-parse-as-library")
+  add_library(${name} ${ASLL_SOURCES})
+  target_link_libraries(${name} ${ASLL_SWIFT_MODULE_DEPENDS})
+
+  set_target_properties(${name} PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}")
+
+  if(NOT LTO)
+    return()
+  endif()
+
+  set(compile_options "-parse-as-library" $<$<CONFIG:Release>:"-O">)
   set(dependency_targets)
 
   foreach(dependency ${ASLL_SWIFT_MODULE_DEPENDS})
@@ -79,12 +89,6 @@ function(add_swift_lto_library name)
     SOURCES ${ASLL_SOURCES}
     SWIFT_MODULE_DEPENDS ${ASLL_SWIFT_MODULE_DEPENDS}
     COMPILE_OPTIONS ${compile_options})
-
-  add_library(${name} ${ASLL_SOURCES})
-  target_link_libraries(${name} ${ASLL_SWIFT_MODULE_DEPENDS})
-
-  set_target_properties(${name} PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}")
 
   add_custom_target("${name}_ALL"
     DEPENDS ${name} "${name}_LTO" ${dependency_targets})
@@ -139,7 +143,7 @@ function(_lower_and_optimize_sib_to_object target)
         "-Xfrontend" "-module-summary-path"
         "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
         "-Xfrontend" "-disable-diagnostic-passes"
-        "${compile_options}"
+        ${compile_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${target}.o"
   )
 
@@ -154,10 +158,16 @@ function(add_swift_lto_executable name)
     "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
     ${ARGN})  
 
+  if(NOT LTO)
+    add_executable(${name} ${ASLE_SOURCES})
+    target_link_libraries(${name} ${ASLE_SWIFT_MODULE_DEPENDS})
+    return()
+  endif()
+
   _emit_swift_lto_intermediate_files(${name}
     SOURCES ${ASLE_SOURCES}
     SWIFT_MODULE_DEPENDS ${ASLE_SWIFT_MODULE_DEPENDS}
-    COMPILE_OPTIONS "")
+    COMPILE_OPTIONS $<$<CONFIG:Release>:"-O">)
 
   _merge_swift_module_summaries(${name}
     SWIFT_MODULES ${ASLE_SWIFT_MODULE_DEPENDS};${name})
