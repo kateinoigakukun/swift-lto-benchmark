@@ -1,12 +1,29 @@
 #!/bin/bash
 
-set -x
+usage() {
+    echo "Usage: $(basename $0) path/to/swiftc [-n]"
+    echo "Options:"
+    echo -e "  -n\tskip build"
+    exit 1
+}
+
+set -e
 SWIFTC=$1
 ROOT_PATH="$(cd "$(dirname $0)/../" && pwd)"
 
+shift
+for opt in "$@"
+do
+    case $opt in
+        -n) SKIP_BUILD=1;;
+        *) usage;;
+    esac
+    shift
+done
+
 mkdir -p "$ROOT_PATH/build"
 
-function cmake_options() {
+cmake_options() {
     local variant=$1
     case "${variant}" in
         "Onone")     echo "-DLTO=FALSE -DCMAKE_BUILD_TYPE=" ;;
@@ -20,8 +37,11 @@ MATRIX=("Onone" "Onone-LTO" "O" "O-LTO")
 
 for variant in "${MATRIX[@]}"; do
     mkdir -p "${ROOT_PATH}/build/${variant}"
-    (cd "${ROOT_PATH}/build/${variant}" && \
-        cmake ../../ -GNinja $(cmake_options $variant) \
-            -DCMAKE_Swift_COMPILER=$SWIFTC && \
-        ninja benchmark)
+    pushd "${ROOT_PATH}/build/${variant}"
+    cmake ../../ -GNinja $(cmake_options $variant) \
+         -DCMAKE_Swift_COMPILER=$SWIFTC
+    if [[ ! "${SKIP_BUILD}" ]]; then
+        ninja benchmark
+    fi
+    popd
 done
