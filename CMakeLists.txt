@@ -4,7 +4,7 @@ list(APPEND CMAKE_MODULE_PATH
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 project(swift-lto-benchmark
-  LANGUAGES Swift)
+  LANGUAGES Swift C)
 
 set(LTO TRUE CACHE BOOL "Link time optimization")
 

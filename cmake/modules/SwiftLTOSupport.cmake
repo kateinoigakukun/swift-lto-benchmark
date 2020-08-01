@@ -26,11 +26,11 @@ function(_emit_swift_lto_intermediate_files)
   set(dependency_targets)
 
   foreach(dependency ${ESLIF_SWIFT_MODULE_DEPENDS})
-    set(include_dir)
-    get_target_property(include_dir ${dependency} INTERFACE_INCLUDE_DIRECTORIES)
-    if(include_dir)
-      list(APPEND compile_options "-I${include_dir}")
-    endif()
+    set(include_dirs)
+    get_target_property(include_dirs ${dependency} INTERFACE_INCLUDE_DIRECTORIES)
+    foreach(dir ${include_dirs})
+      list(APPEND compile_options "-I${dir}")
+    endforeach()
     if (TARGET "${dependency}_ALL")
       list(APPEND dependency_targets "${dependency}_ALL")
     endif()
@@ -41,6 +41,7 @@ function(_emit_swift_lto_intermediate_files)
     DEPENDS ${ESLIF_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-emit-sib"
+        "-module-name" "${name}"
         "-Xfrontend" "-emit-module-summary-path"
         "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule.summary"
         ${absolute_source_files} ${compile_options}
@@ -66,20 +67,25 @@ function(add_swift_lto_library name)
     "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
     ${ARGN})
 
-  add_library(${name} ${ASLL_SOURCES})
-  target_link_libraries(${name} ${ASLL_SWIFT_MODULE_DEPENDS})
-
-  set_target_properties(${name} PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}")
-
   set(compile_options "-parse-as-library" $<$<CONFIG:Release>:"-O">)
   set(dependency_targets)
+  set(self_include_dirs "${CMAKE_CURRENT_BINARY_DIR}")
 
   foreach(dependency ${ASLL_SWIFT_MODULE_DEPENDS})
+    get_target_property(include_dirs ${dependency} INTERFACE_INCLUDE_DIRECTORIES)
+    foreach(dir ${include_dirs})
+      list(APPEND self_include_dirs "${dir}")
+    endforeach()
+
     if (TARGET "${dependency}_ALL")
       list(APPEND dependency_targets "${dependency}_ALL")
     endif()
   endforeach()
+
+  add_library(${name} ${ASLL_SOURCES})
+  target_link_libraries(${name} ${ASLL_SWIFT_MODULE_DEPENDS})
+  set_target_properties(${name} PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${self_include_dirs}")
 
   _emit_swift_lto_intermediate_files(${name}
     SOURCES ${ASLL_SOURCES}
