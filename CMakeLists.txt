@@ -9,3 +9,6 @@ project(swift-lto-benchmark
 set(LTO TRUE CACHE BOOL "Link time optimization")
 
 add_subdirectory(Example)
+
+add_custom_target(benchmark
+  DEPENDS SwiftyJSONExample)
