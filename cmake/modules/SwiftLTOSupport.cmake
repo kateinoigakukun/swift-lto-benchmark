@@ -98,7 +98,10 @@ function(add_swift_lto_library name)
     "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
     ${ARGN})
 
-  set(compile_options "-parse-as-library" $<$<CONFIG:Release>:"-O">)
+  set(compile_options
+    "-parse-as-library"
+    $<$<CONFIG:MinSizeRel>:"-Osize">
+    $<$<CONFIG:Release>:"-O">)
   set(dependency_targets)
   set(self_include_dirs "${CMAKE_CURRENT_BINARY_DIR}")
 
@@ -218,7 +221,9 @@ function(add_swift_lto_executable name)
   _emit_swift_lto_intermediate_files(${name}
     SOURCES ${ASLE_SOURCES}
     SWIFT_MODULE_DEPENDS ${ASLE_SWIFT_MODULE_DEPENDS}
-    COMPILE_OPTIONS $<$<CONFIG:Release>:"-O">)
+    COMPILE_OPTIONS
+      $<$<CONFIG:MinSizeRel>:"-Osize">
+      $<$<CONFIG:Release>:"-O">)
 
   _merge_swift_module_summaries(${name}
     SWIFT_MODULES ${ASLE_SWIFT_MODULE_DEPENDS};${name})

@@ -27,13 +27,15 @@ cmake_options() {
     local variant=$1
     case "${variant}" in
         "Onone")     echo "-DLTO=FALSE -DCMAKE_BUILD_TYPE=" ;;
-        "Onone-LTO") echo "-DLTO=TRUE -DCMAKE_BUILD_TYPE=" ;;
+        "Onone-LTO") echo "-DLTO=TRUE  -DCMAKE_BUILD_TYPE=" ;;
         "O")         echo "-DLTO=FALSE -DCMAKE_BUILD_TYPE=Release" ;;
-        "O-LTO")     echo "-DLTO=TRUE -DCMAKE_BUILD_TYPE=Release";;
+        "O-LTO")     echo "-DLTO=TRUE  -DCMAKE_BUILD_TYPE=Release" ;;
+        "Osize")     echo "-DLTO=FALSE -DCMAKE_BUILD_TYPE=MinSizeRel" ;;
+        "Osize-LTO") echo "-DLTO=TRUE  -DCMAKE_BUILD_TYPE=MinSizeRel" ;;
     esac
 }
 
-MATRIX=("Onone" "Onone-LTO" "O" "O-LTO")
+MATRIX=("Onone" "Onone-LTO" "O" "O-LTO" "Osize" "Osize-LTO")
 
 for variant in "${MATRIX[@]}"; do
     mkdir -p "${ROOT_PATH}/build/${variant}"
