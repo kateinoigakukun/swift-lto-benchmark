@@ -9,9 +9,20 @@ $ ./utils/build-script path/to/swiftc
 
 ## Result
 
-| variant | file path | size (byte) |
-| :-      | :-        | :-:  |
-| -Onone | build/Onone/Example/SwiftyJSONExample | 279920 |
-| -Onone + LTO | build/Onone-LTO/Example/SwiftyJSONExample | 230900 |
-| -O | build/O/Example/SwiftyJSONExample | 288384 |
-| -O + LTO | build/O-LTO/Example/SwiftyJSONExample | 230836 |
+### SwiftyJSON
+
+| variant      | size (byte) |
+| :----------- | :---------- |
+| -Onone       | 279920      |
+| -Onone + LTO | 230900      |
+| -O           | 288384      |
+| -O + LTO     | 230836      |
+
+### SwiftSyntax
+
+| variant      | size (byte) |
+| :----------- | :---------- |
+| -Onone       | 13875832    |
+| -Onone + LTO | 10821912    |
+| -O           | 6137936     |
+| -O + LTO     | 6068400     |
