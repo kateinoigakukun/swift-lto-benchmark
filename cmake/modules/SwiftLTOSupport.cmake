@@ -40,11 +40,42 @@ function(_emit_swift_lto_intermediate_files)
     OUTPUT ${lto_intermediate_files}
     DEPENDS ${ESLIF_SOURCES} ${dependency_targets}
     COMMAND
-      "${CMAKE_Swift_COMPILER}" "-emit-sib"
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-sib"
         "-module-name" "${name}"
-        "-Xfrontend" "-emit-module-summary-path"
-        "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule.summary"
+        "-sdk" "$ENV{SDKROOT}"
+        "-emit-module-summary-path"
+        "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule.summary"
         ${absolute_source_files} ${compile_options}
+  )
+
+  add_custom_target(${name}-raw.sil
+    DEPENDS ${ESLIF_SOURCES} ${dependency_targets}
+    COMMAND
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-sil"
+        "-module-name" "${name}"
+        "-sdk" "$ENV{SDKROOT}"
+        ${absolute_source_files} ${compile_options}
+        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}-raw.sil"
+  )
+
+  add_custom_target(${name}-raw.ll
+    DEPENDS ${ESLIF_SOURCES} ${dependency_targets}
+    COMMAND
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-ir"
+        "-module-name" "${name}"
+        "-sdk" "$ENV{SDKROOT}"
+        ${absolute_source_files} ${compile_options}
+        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}-raw.ll"
+  )
+
+  add_custom_target(${name}-raw.o
+    DEPENDS ${ESLIF_SOURCES} ${dependency_targets}
+    COMMAND
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-c"
+        "-module-name" "${name}"
+        "-sdk" "$ENV{SDKROOT}"
+        ${absolute_source_files} ${compile_options}
+        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}-raw.o"
   )
 
   add_custom_target("${name}_LTO"
@@ -149,6 +180,30 @@ function(_lower_and_optimize_sib_to_object target)
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${target}.o"
   )
 
+  add_custom_target(${target}-lto.sil
+    DEPENDS ${LOSO_MERGED_SUMMARY} ${lto_target}
+    COMMAND
+      "${CMAKE_Swift_COMPILER}" "-emit-sil" "${sib_path}"
+        "-module-name" "${target}"
+        "-Xfrontend" "-module-summary-path"
+        "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
+        "-Xfrontend" "-disable-diagnostic-passes"
+        ${compile_options}
+        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${target}-lto.sil"
+  )
+
+  add_custom_target(${target}-lto.ll
+    DEPENDS ${LOSO_MERGED_SUMMARY} ${lto_target}
+    COMMAND
+      "${CMAKE_Swift_COMPILER}" "-emit-ir" "${sib_path}"
+        "-module-name" "${target}"
+        "-Xfrontend" "-module-summary-path"
+        "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
+        "-Xfrontend" "-disable-diagnostic-passes"
+        ${compile_options}
+        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${target}-lto.ll"
+  )
+
 endfunction()
 
 
@@ -157,7 +212,7 @@ function(add_swift_lto_executable name)
     ASLE # prefix
     "" # options
     "" # single-value args
-    "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
+    "SOURCES;SWIFT_MODULE_DEPENDS;LINKER_OPTIONS" # multi-value args
     ${ARGN})  
 
   _emit_swift_lto_intermediate_files(${name}
@@ -182,11 +237,17 @@ function(add_swift_lto_executable name)
   list(APPEND link_objects "${name}.o")
   list(APPEND absolute_link_objects "${CMAKE_CURRENT_BINARY_DIR}/${name}.o")
 
+  set(driver_options)
+  foreach(option ${ASLE_LINKER_OPTIONS})
+    list(APPEND driver_options "-Xlinker" "${option}")
+  endforeach()
+
   add_custom_target(${name}
     DEPENDS ${link_objects}
     COMMAND
       "${CMAKE_Swift_COMPILER}"
         ${absolute_link_objects}
+        ${driver_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
   )
 endfunction()

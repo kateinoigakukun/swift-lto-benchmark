@@ -12,11 +12,18 @@ if(LTO)
 
   add_swift_lto_executable(SwiftSyntaxExample
     SOURCES ${SwiftSyntaxExample_sources}
-    SWIFT_MODULE_DEPENDS SwiftSyntax)
+    SWIFT_MODULE_DEPENDS SwiftSyntax
+    LINKER_OPTIONS
+      "-L/Applications/Xcode-11.4.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/"
+      "-L${CMAKE_CURRENT_BINARY_DIR}/third-party"
+      "-l_CSwiftSyntax"
+      "-l_InternalSwiftSyntaxParser"
+      "-rpath" "/Applications/Xcode-11.4.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx")
 else()
   add_executable(SwiftyJSONExample ${SwiftyJSONExample_sources})
   target_link_libraries(SwiftyJSONExample SwiftyJSON)
 
-  add_executable(SwiftSyntaxExample ${SwiftyJSONExample_sources})
-  target_link_libraries(SwiftSyntaxExample SwiftSyntax)
+  add_executable(SwiftSyntaxExample ${SwiftSyntaxExample_sources})
+  target_link_libraries(SwiftSyntaxExample SwiftSyntax _CSwiftSyntax _InternalSwiftSyntaxParser)
+  target_link_directories(SwiftSyntaxExample PRIVATE "/Applications/Xcode-11.4.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/")
 endif()

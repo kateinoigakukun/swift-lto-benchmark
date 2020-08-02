@@ -33,6 +33,7 @@ if(LTO)
     SWIFT_MODULE_DEPENDS _CSwiftSyntax)
 else()
   add_library(SwiftSyntax ${SwiftSyntax_sources})
+  target_link_libraries(SwiftSyntax _CSwiftSyntax)
   set_target_properties(SwiftSyntax PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}")
 endif()
