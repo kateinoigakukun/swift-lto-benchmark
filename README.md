@@ -10,6 +10,7 @@ $ ./utils/build-script path/to/swiftc
 ## Result
 
 ### SwiftyJSON
+### SwiftyJSON
 <table>
 <tr>
    <td rowspan=2>Variant</td>
@@ -30,14 +31,14 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
     <td>O</td>
-    <td>306.4 KB</td>
+    <td>310.6 KB</td>
     <td>253.6 KB</td>
     <td>299.2 KB</td>
     <td>233.1 KB</td>
 </tr>
 <tr>
     <td>Osize</td>
-    <td>306.4 KB</td>
+    <td>278.3 KB</td>
     <td>221.2 KB</td>
     <td>251.8 KB</td>
     <td>203.0 KB</td>
@@ -66,14 +67,14 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
     <td>O</td>
-    <td>16.1 MB</td>
+    <td>6.9 MB</td>
     <td>5.9 MB</td>
     <td>6.9 MB</td>
     <td>5.0 MB</td>
 </tr>
 <tr>
     <td>Osize</td>
-    <td>16.1 MB</td>
+    <td>5.6 MB</td>
     <td>5.1 MB</td>
     <td>5.3 MB</td>
     <td>3.9 MB</td>
@@ -102,18 +103,21 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
     <td>O</td>
-    <td>2.8 MB</td>
+    <td>1.6 MB</td>
     <td>1.4 MB</td>
     <td>1.6 MB</td>
     <td>1.3 MB</td>
 </tr>
 <tr>
     <td>Osize</td>
-    <td>2.8 MB</td>
+    <td>1.5 MB</td>
     <td>1.3 MB</td>
     <td>1.5 MB</td>
     <td>1.2 MB</td>
 </tr>
 </table>
+
+
+
 
 
