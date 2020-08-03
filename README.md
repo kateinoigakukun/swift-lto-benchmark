@@ -10,86 +10,110 @@ $ ./utils/build-script path/to/swiftc
 ## Result
 
 ### SwiftyJSON
-
 <table>
 <tr>
    <td rowspan=2>Variant</td>
-   <td colspan=3>Size</td>
+   <td colspan=4>Size</td>
 </tr>
 <tr>
-    <td>LTO-ed</td>
-    <td>non-LTO-ed</td>
+    <td>non-LTO</td>
+    <td>Swift LTO</td>
+    <td>LLVM LTO</td>
+    <td>Swift & LLVM LTO</td>
 </tr>
 <tr>
-    <td>-Onone</td>
-    <td>251K</td>
-    <td>306K</td>
+    <td>Onone</td>
+    <td>306.4 KB</td>
+    <td>250.5 KB</td>
+    <td>234.0 KB</td>
+    <td>202.2 KB</td>
 </tr>
 <tr>
-    <td>-O</td>
-    <td>254K</td>
-    <td>311K</td>
+    <td>O</td>
+    <td>306.4 KB</td>
+    <td>253.6 KB</td>
+    <td>299.2 KB</td>
+    <td>233.1 KB</td>
 </tr>
 <tr>
-    <td>-Osize</td>
-    <td>221K</td>
-    <td>278K</td>
+    <td>Osize</td>
+    <td>306.4 KB</td>
+    <td>221.2 KB</td>
+    <td>251.8 KB</td>
+    <td>203.0 KB</td>
 </tr>
 </table>
 
-### SwiftSyntax
 
+### SwiftSyntax
 <table>
 <tr>
    <td rowspan=2>Variant</td>
-   <td colspan=3>Size</td>
+   <td colspan=4>Size</td>
 </tr>
 <tr>
-    <td>LTO-ed</td>
-    <td>non-LTO-ed</td>
+    <td>non-LTO</td>
+    <td>Swift LTO</td>
+    <td>LLVM LTO</td>
+    <td>Swift & LLVM LTO</td>
 </tr>
 <tr>
-    <td>-Onone</td>
-    <td>10M</td>
-    <td>16M</td>
+    <td>Onone</td>
+    <td>16.1 MB</td>
+    <td>10.4 MB</td>
+    <td>8.2 MB</td>
+    <td>5.6 MB</td>
 </tr>
 <tr>
-    <td>-O</td>
-    <td>5.9M</td>
-    <td>6.9M</td>
+    <td>O</td>
+    <td>16.1 MB</td>
+    <td>5.9 MB</td>
+    <td>6.9 MB</td>
+    <td>5.0 MB</td>
 </tr>
 <tr>
-    <td>-Osize</td>
-    <td>5.1M</td>
-    <td>5.6M</td>
+    <td>Osize</td>
+    <td>16.1 MB</td>
+    <td>5.1 MB</td>
+    <td>5.3 MB</td>
+    <td>3.9 MB</td>
 </tr>
 </table>
 
 
 ### RxSwift
-
 <table>
 <tr>
    <td rowspan=2>Variant</td>
-   <td colspan=3>Size</td>
+   <td colspan=4>Size</td>
 </tr>
 <tr>
-    <td>LTO-ed</td>
-    <td>non-LTO-ed</td>
+    <td>non-LTO</td>
+    <td>Swift LTO</td>
+    <td>LLVM LTO</td>
+    <td>Swift & LLVM LTO</td>
 </tr>
 <tr>
-    <td>-Onone</td>
-    <td>2.0M</td>
-    <td>2.8M</td>
+    <td>Onone</td>
+    <td>2.8 MB</td>
+    <td>2.0 MB</td>
+    <td>1.8 MB</td>
+    <td>1.4 MB</td>
 </tr>
 <tr>
-    <td>-O</td>
-    <td>1.4M</td>
-    <td>1.6M</td>
+    <td>O</td>
+    <td>2.8 MB</td>
+    <td>1.4 MB</td>
+    <td>1.6 MB</td>
+    <td>1.3 MB</td>
 </tr>
 <tr>
-    <td>-Osize</td>
-    <td>1.3M</td>
-    <td>1.5M</td>
+    <td>Osize</td>
+    <td>2.8 MB</td>
+    <td>1.3 MB</td>
+    <td>1.5 MB</td>
+    <td>1.2 MB</td>
 </tr>
 </table>
+
+
