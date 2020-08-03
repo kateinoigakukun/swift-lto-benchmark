@@ -1,3 +1,5 @@
+# Swift LTO
+
 function(_emit_swift_lto_intermediate_files name)
   cmake_parse_arguments(
     ESLIF # prefix
@@ -259,7 +261,7 @@ endfunction()
 
 
 
-# Swift LTO by LLVM
+# LLVM LTO
 
 function(_emit_swift_llvm_bc name)
   cmake_parse_arguments(
@@ -352,15 +354,13 @@ function(add_swift_llvm_lto_library name)
 endfunction()
 
 
-function(add_swift_llvm_lto_executable name)
+function(add_llvm_lto_executable name)
   cmake_parse_arguments(
     ASLE # prefix
     "" # options
     "" # single-value args
     "SOURCES;SWIFT_MODULE_DEPENDS;LINKER_OPTIONS" # multi-value args
     ${ARGN})
-
-  set(driver_options "-lto=llvm-full")
 
   _emit_swift_llvm_bc(${name}
     SOURCES ${ASLE_SOURCES}
@@ -387,6 +387,90 @@ function(add_swift_llvm_lto_executable name)
   set(xcode_toolchain /Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr)
   add_custom_target(${name}
     DEPENDS ${dependency_targets}
+    COMMAND
+      "ld"
+        ${absolute_link_objects}
+        "-lto_library" "/Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib"
+        ${xcode_toolchain}/lib/swift/clang/lib/darwin/libclang_rt.osx.a
+        -syslibroot /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
+        -lobjc -lSystem -arch x86_64
+        -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility51.a
+        -L ${toolchain}/lib/swift/macosx
+        -L ${xcode_toolchain}/lib/swift
+        -L ${xcode_toolchain}/lib/swift-5.0/macosx/
+        -platform_version macos 10.15.0 11.0.0
+        -no_objc_category_merging
+        ${ASLE_LINKER_OPTIONS}
+        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
+  )
+endfunction()
+
+
+# Swift and LLVM LTO
+
+function(_lower_and_optimize_sib_to_bc target)
+  cmake_parse_arguments(
+    LOSB # prefix
+    "" # options
+    "MERGED_SUMMARY" # single-value args
+    "" # multi-value args
+    ${ARGN})
+  set(lto_target "${target}_LTO")
+  set(sib_path)
+  get_target_property(sib_path "${lto_target}" SIB_PATH)
+  set(compile_options)
+  get_target_property(compile_options "${lto_target}" SWIFT_COMPILE_OPTIONS)
+
+  add_custom_target(${target}.bc
+    DEPENDS ${LOSB_MERGED_SUMMARY} ${lto_target}
+    COMMAND
+      "${CMAKE_Swift_COMPILER}" "-emit-bc" "${sib_path}"
+        "-lto=llvm-full"
+        "-Xfrontend" "-module-summary-path"
+        "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${LOSB_MERGED_SUMMARY}"
+        "-Xfrontend" "-disable-diagnostic-passes"
+        ${compile_options}
+        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${target}.bc"
+  )
+endfunction()
+
+function(add_swift_llvm_lto_executable name)
+  cmake_parse_arguments(
+    ASLE # prefix
+    "" # options
+    "" # single-value args
+    "SOURCES;SWIFT_MODULE_DEPENDS;LINKER_OPTIONS" # multi-value args
+    ${ARGN})
+
+  _emit_swift_lto_intermediate_files(${name}
+    SOURCES ${ASLE_SOURCES}
+    SWIFT_MODULE_DEPENDS ${ASLE_SWIFT_MODULE_DEPENDS}
+    COMPILE_OPTIONS
+      $<$<CONFIG:MinSizeRel>:"-Osize">
+      $<$<CONFIG:Release>:"-O">)
+
+  _merge_swift_module_summaries(${name}
+    SWIFT_MODULES ${ASLE_SWIFT_MODULE_DEPENDS};${name})
+
+  set(link_objects)
+  set(absolute_link_objects)
+  foreach(dependency ${ASLE_SWIFT_MODULE_DEPENDS})
+    _lower_and_optimize_sib_to_bc(${dependency}
+      MERGED_SUMMARY "${name}.swiftmodule.merged-summary")
+    list(APPEND link_objects "${dependency}.bc")
+    list(APPEND absolute_link_objects "${CMAKE_CURRENT_BINARY_DIR}/${dependency}.bc")
+  endforeach()
+
+  _lower_and_optimize_sib_to_bc(${name}
+    MERGED_SUMMARY "${name}.swiftmodule.merged-summary")
+
+  list(APPEND link_objects "${name}.bc")
+  list(APPEND absolute_link_objects "${CMAKE_CURRENT_BINARY_DIR}/${name}.bc")
+
+  get_filename_component(toolchain ${CMAKE_Swift_COMPILER}/../.. ABSOLUTE)
+  set(xcode_toolchain /Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr)
+  add_custom_target(${name}
+    DEPENDS ${link_objects}
     COMMAND
       "ld"
         ${absolute_link_objects}
