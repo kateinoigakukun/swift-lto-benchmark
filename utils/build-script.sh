@@ -7,6 +7,10 @@ usage() {
     exit 1
 }
 
+if [ $# -le 0 ]; then
+    usage
+fi
+
 set -e
 SWIFTC=$1
 ROOT_PATH="$(cd "$(dirname $0)/../" && pwd)"
@@ -23,19 +27,40 @@ done
 
 mkdir -p "$ROOT_PATH/build"
 
-cmake_options() {
+is_swift_lto() {
     local variant=$1
     case "${variant}" in
-        "Onone")     echo "-DLTO=FALSE -DCMAKE_BUILD_TYPE=" ;;
-        "Onone-LTO") echo "-DLTO=TRUE  -DCMAKE_BUILD_TYPE=" ;;
-        "O")         echo "-DLTO=FALSE -DCMAKE_BUILD_TYPE=Release" ;;
-        "O-LTO")     echo "-DLTO=TRUE  -DCMAKE_BUILD_TYPE=Release" ;;
-        "Osize")     echo "-DLTO=FALSE -DCMAKE_BUILD_TYPE=MinSizeRel" ;;
-        "Osize-LTO") echo "-DLTO=TRUE  -DCMAKE_BUILD_TYPE=MinSizeRel" ;;
+        *-swift-lto) echo "TRUE" ;;
+        *)           echo "FALSE" ;;
     esac
 }
 
-MATRIX=("Onone" "Onone-LTO" "O" "O-LTO" "Osize" "Osize-LTO")
+is_llvm_lto() {
+    local variant=$1
+    case "${variant}" in
+        *-llvm-lto) echo "TRUE" ;;
+        *)          echo "FALSE" ;;
+    esac
+}
+
+cmake_build_type() {
+    local variant=$1
+    case "${variant}" in
+        Onone-*) echo "" ;;
+        O-*)     echo "Release" ;;
+        Osize-*) echo "MinSizeRel" ;;
+    esac
+}
+
+cmake_options() {
+    echo "-DSWIFT_LTO=$(is_swift_lto $1) -DLLVM_LTO=$(is_llvm_lto $1) -DCMAKE_BUILD_TYPE=$(cmake_build_type $1)"
+}
+
+MATRIX=(
+    "Onone" "Onone-swift-lto" "Onone-llvm-lto"
+    "O"     "O-swift-lto"     "O-llvm-lto"
+    "Osize" "Osize-swift-lto" "Osize-llvm-lto"
+)
 
 for variant in "${MATRIX[@]}"; do
     mkdir -p "${ROOT_PATH}/build/${variant}"

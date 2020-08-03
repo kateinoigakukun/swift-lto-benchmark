@@ -1,4 +1,4 @@
-function(_emit_swift_lto_intermediate_files)
+function(_emit_swift_lto_intermediate_files name)
   cmake_parse_arguments(
     ESLIF # prefix
     "" # options
@@ -253,6 +253,154 @@ function(add_swift_lto_executable name)
       "${CMAKE_Swift_COMPILER}"
         ${absolute_link_objects}
         ${driver_options}
+        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
+  )
+endfunction()
+
+
+
+# Swift LTO by LLVM
+
+function(_emit_swift_llvm_bc name)
+  cmake_parse_arguments(
+    ESLB # prefix
+    "" # options
+    "" # single-value args
+    "SOURCES;SWIFT_MODULE_DEPENDS;COMPILE_OPTIONS" # multi-value args
+    ${ARGN})
+
+  set(compile_options "${ESLB_COMPILE_OPTIONS}")
+
+  set(absolute_source_files)
+
+  foreach(file ${ESLB_SOURCES})
+    get_filename_component(file_path ${file} PATH)
+    if(IS_ABSOLUTE "${file_path}")
+      list(APPEND absolute_source_files "${file}")
+    else()
+      list(APPEND absolute_source_files "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
+    endif()
+  endforeach()
+
+  set(dependency_targets)
+
+  foreach(dependency ${ESLB_SWIFT_MODULE_DEPENDS})
+    set(include_dirs)
+    get_target_property(include_dirs ${dependency} INTERFACE_INCLUDE_DIRECTORIES)
+    foreach(dir ${include_dirs})
+      list(APPEND compile_options "-I${dir}")
+    endforeach()
+    if (TARGET "${dependency}_ALL")
+      list(APPEND dependency_targets "${dependency}_ALL")
+    endif()
+  endforeach()
+
+  add_custom_target("${name}.bc"
+    DEPENDS ${ESLB_SOURCES} ${dependency_targets}
+    COMMAND
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-bc"
+        "-module-name" "${name}"
+        "-sdk" "$ENV{SDKROOT}"
+        "-lto=llvm-full"
+        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}.bc"
+        ${absolute_source_files} ${compile_options}
+  )
+
+  set_target_properties("${name}.bc" PROPERTIES
+    BITCODE_PATH "${CMAKE_CURRENT_BINARY_DIR}/${name}.bc")
+endfunction()
+
+
+function(add_swift_llvm_lto_library name)
+  cmake_parse_arguments(
+    ASLL # prefix
+    "" # options
+    "" # single-value args
+    "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
+    ${ARGN})
+
+  set(compile_options
+    "-parse-as-library"
+    $<$<CONFIG:MinSizeRel>:"-Osize">
+    $<$<CONFIG:Release>:"-O">)
+  set(dependency_targets)
+  set(self_include_dirs "${CMAKE_CURRENT_BINARY_DIR}")
+
+  foreach(dependency ${ASLL_SWIFT_MODULE_DEPENDS})
+    get_target_property(include_dirs ${dependency} INTERFACE_INCLUDE_DIRECTORIES)
+    foreach(dir ${include_dirs})
+      list(APPEND self_include_dirs "${dir}")
+    endforeach()
+
+    if (TARGET "${dependency}_ALL")
+      list(APPEND dependency_targets "${dependency}_ALL")
+    endif()
+  endforeach()
+
+  add_library(${name} ${ASLL_SOURCES})
+  target_link_libraries(${name} ${ASLL_SWIFT_MODULE_DEPENDS})
+  set_target_properties(${name} PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${self_include_dirs}")
+
+  _emit_swift_llvm_bc(${name}
+    SOURCES ${ASLL_SOURCES}
+    SWIFT_MODULE_DEPENDS ${ASLL_SWIFT_MODULE_DEPENDS}
+    COMPILE_OPTIONS ${compile_options})
+
+  add_custom_target("${name}_ALL"
+    DEPENDS ${name} "${name}.bc" ${dependency_targets})
+endfunction()
+
+
+function(add_swift_llvm_lto_executable name)
+  cmake_parse_arguments(
+    ASLE # prefix
+    "" # options
+    "" # single-value args
+    "SOURCES;SWIFT_MODULE_DEPENDS;LINKER_OPTIONS" # multi-value args
+    ${ARGN})
+
+  set(driver_options "-lto=llvm-full")
+
+  _emit_swift_llvm_bc(${name}
+    SOURCES ${ASLE_SOURCES}
+    SWIFT_MODULE_DEPENDS ${ASLE_SWIFT_MODULE_DEPENDS}
+    COMPILE_OPTIONS
+      $<$<CONFIG:MinSizeRel>:"-Osize">
+      $<$<CONFIG:Release>:"-O">)
+
+  set(dependency_targets)
+  set(absolute_link_objects)
+  foreach(dependency ${ASLE_SWIFT_MODULE_DEPENDS})
+    list(APPEND dependency_targets "${dependency}.bc")
+    set(bc_path)
+    get_target_property(bc_path "${dependency}.bc" BITCODE_PATH)
+    list(APPEND absolute_link_objects ${bc_path})
+  endforeach()
+
+  list(APPEND dependency_targets "${name}.bc")
+  set(bc_path)
+  get_target_property(bc_path "${name}.bc" BITCODE_PATH)
+  list(APPEND absolute_link_objects ${bc_path})
+
+  get_filename_component(toolchain ${CMAKE_Swift_COMPILER}/../.. ABSOLUTE)
+  set(xcode_toolchain /Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr)
+  add_custom_target(${name}
+    DEPENDS ${dependency_targets}
+    COMMAND
+      "ld"
+        ${absolute_link_objects}
+        "-lto_library" "/Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib"
+        ${xcode_toolchain}/lib/swift/clang/lib/darwin/libclang_rt.osx.a
+        -syslibroot /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
+        -lobjc -lSystem -arch x86_64
+        -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility51.a
+        -L ${toolchain}/lib/swift/macosx
+        -L ${xcode_toolchain}/lib/swift
+        -L ${xcode_toolchain}/lib/swift-5.0/macosx/
+        -platform_version macos 10.15.0 11.0.0
+        -no_objc_category_merging
+        ${ASLE_LINKER_OPTIONS}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
   )
 endfunction()

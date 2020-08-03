@@ -1,8 +1,11 @@
 # SwiftyJSON
 set(SwiftyJSON_sources SwiftyJSON/Source/SwiftyJSON/SwiftyJSON.swift)
 
-if(LTO)
+if(SWIFT_LTO)
   add_swift_lto_library(SwiftyJSON
+    SOURCES ${SwiftyJSON_sources})
+elseif(LLVM_LTO)
+  add_swift_llvm_lto_library(SwiftyJSON
     SOURCES ${SwiftyJSON_sources})
 else()
   add_library(SwiftyJSON ${SwiftyJSON_sources})
@@ -27,8 +30,12 @@ set_target_properties(_CSwiftSyntax PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_CSwiftSyntax_include_directories}")
 file(GLOB_RECURSE SwiftSyntax_sources "swift-syntax/Sources/SwiftSyntax/*.swift")
 
-if(LTO)
+if(SWIFT_LTO)
   add_swift_lto_library(SwiftSyntax
+    SOURCES ${SwiftSyntax_sources}
+    SWIFT_MODULE_DEPENDS _CSwiftSyntax)
+elseif(LLVM_LTO)
+  add_swift_llvm_lto_library(SwiftSyntax
     SOURCES ${SwiftSyntax_sources}
     SWIFT_MODULE_DEPENDS _CSwiftSyntax)
 else()
@@ -42,8 +49,11 @@ endif()
 # RxSwift
 file(GLOB_RECURSE RxSwift_sources "RxSwift/Sources/RxSwift/*.swift")
 
-if(LTO)
+if(SWIFT_LTO)
   add_swift_lto_library(RxSwift
+    SOURCES ${RxSwift_sources})
+elseif(LLVM_LTO)
+  add_swift_llvm_lto_library(RxSwift
     SOURCES ${RxSwift_sources})
 else()
   add_library(RxSwift ${RxSwift_sources})
