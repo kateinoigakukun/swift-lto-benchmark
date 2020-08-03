@@ -50,9 +50,9 @@ is_llvm_lto() {
 cmake_build_type() {
     local variant=$1
     case "${variant}" in
-        Onone-*) echo "" ;;
-        O-*)     echo "Release" ;;
-        Osize-*) echo "MinSizeRel" ;;
+        Onone-* | Onone) echo "" ;;
+        O-* | O)         echo "Release" ;;
+        Osize-* | Osize) echo "MinSizeRel" ;;
     esac
 }
 
