@@ -36,4 +36,18 @@ else()
   target_link_libraries(SwiftSyntax _CSwiftSyntax)
   set_target_properties(SwiftSyntax PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}")
+  target_compile_options(SwiftSyntax PRIVATE "-whole-module-optimization")
+endif()
+
+# RxSwift
+file(GLOB_RECURSE RxSwift_sources "RxSwift/Sources/RxSwift/*.swift")
+
+if(LTO)
+  add_swift_lto_library(RxSwift
+    SOURCES ${RxSwift_sources})
+else()
+  add_library(RxSwift ${RxSwift_sources})
+  set_target_properties(RxSwift PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}")
+  target_compile_options(RxSwift PRIVATE "-whole-module-optimization")
 endif()

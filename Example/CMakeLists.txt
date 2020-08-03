@@ -4,6 +4,7 @@ add_subdirectory(third-party)
 
 set(SwiftyJSONExample_sources SwiftyJSONExample.swift)
 set(SwiftSyntaxExample_sources SwiftSyntaxExample.swift)
+set(RxSwiftExample_sources RxSwiftExample.swift)
 
 if(LTO)
   add_swift_lto_executable(SwiftyJSONExample
@@ -19,6 +20,10 @@ if(LTO)
       "-l_CSwiftSyntax"
       "-l_InternalSwiftSyntaxParser"
       "-rpath" "/Applications/Xcode-11.4.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx")
+
+  add_swift_lto_executable(RxSwiftExample
+    SOURCES ${RxSwiftExample_sources}
+    SWIFT_MODULE_DEPENDS RxSwift)
 else()
   add_executable(SwiftyJSONExample ${SwiftyJSONExample_sources})
   target_link_libraries(SwiftyJSONExample SwiftyJSON)
@@ -26,4 +31,7 @@ else()
   add_executable(SwiftSyntaxExample ${SwiftSyntaxExample_sources})
   target_link_libraries(SwiftSyntaxExample SwiftSyntax _CSwiftSyntax _InternalSwiftSyntaxParser)
   target_link_directories(SwiftSyntaxExample PRIVATE "/Applications/Xcode-11.4.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/")
+
+  add_executable(RxSwiftExample ${RxSwiftExample_sources})
+  target_link_libraries(RxSwiftExample RxSwift)
 endif()

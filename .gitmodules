@@ -4,3 +4,6 @@
 [submodule "Example/third-party/swift-syntax"]
 	path = Example/third-party/swift-syntax
 	url = https://github.com/apple/swift-syntax.git
+[submodule "Example/third-party/RxSwift"]
+	path = Example/third-party/RxSwift
+	url = https://github.com/ReactiveX/RxSwift.git
