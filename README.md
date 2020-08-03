@@ -9,7 +9,7 @@ $ ./utils/build-script path/to/swiftc
 
 ## Result
 
-### SwiftyJSON
+
 ### SwiftyJSON
 <table>
 <tr>
