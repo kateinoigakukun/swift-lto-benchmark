@@ -77,6 +77,23 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 </table>
 
+#### Runtime Performance
+
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
+|:---|---:|---:|---:|---:|
+| `O-llvm-lto` | 8.8 ± 0.4 | 7.8 | 10.0 | 1.02 ± 0.07 |
+| `O-swift-llvm-lto` | 9.1 ± 0.6 | 7.8 | 11.3 | 1.05 ± 0.09 |
+| `O-swift-lto` | 8.7 ± 0.5 | 7.7 | 10.7 | 1.01 ± 0.08 |
+| `O` | 8.6 ± 0.5 | 7.7 | 10.6 | 1.00 |
+| `Onone-llvm-lto` | 9.9 ± 1.0 | 8.2 | 13.9 | 1.14 ± 0.13 |
+| `Onone-swift-llvm-lto` | 9.2 ± 0.4 | 8.1 | 10.1 | 1.00 |
+| `Onone-swift-lto` | 9.3 ± 0.7 | 8.0 | 12.6 | 1.08 ± 0.10 |
+| `Onone` | 8.8 ± 0.4 | 8.0 | 10.0 | 1.02 ± 0.07 |
+| `Osize-llvm-lto` | 8.9 ± 0.5 | 7.8 | 10.7 | 1.03 ± 0.08 |
+| `Osize-swift-llvm-lto` | 9.0 ± 0.5 | 8.0 | 10.8 | 1.04 ± 0.08 |
+| `Osize-swift-lto` | 9.0 ± 0.5 | 8.0 | 11.1 | 1.04 ± 0.08 |
+| `Osize` | 8.8 ± 0.5 | 8.0 | 11.2 | 1.00 |
+
 
 ### SwiftSyntax
 <table>
@@ -147,8 +164,27 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 </table>
 
+#### Runtime Performance
+
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
+|:---|---:|---:|---:|---:|
+| `O-llvm-lto` | 10.5 ± 0.4 | 9.8 | 11.7 | 1.02 ± 0.06 |
+| `O-swift-llvm-lto` | 10.7 ± 0.5 | 9.8 | 12.2 | 1.04 ± 0.07 |
+| `O-swift-lto` | 10.8 ± 0.6 | 9.8 | 12.7 | 1.04 ± 0.08 |
+| `O` | 10.9 ± 0.6 | 9.8 | 13.3 | 1.06 ± 0.08 |
+| `Onone-llvm-lto` | 11.7 ± 0.7 | 10.7 | 13.7 | 1.13 ± 0.09 |
+| `Onone-swift-llvm-lto` | 11.7 ± 0.6 | 10.7 | 14.5 | 1.00 |
+| `Onone-swift-lto` | 12.3 ± 0.4 | 11.4 | 13.8 | 1.19 ± 0.07 |
+| `Onone` | 12.5 ± 0.6 | 11.3 | 14.9 | 1.21 ± 0.08 |
+| `Osize-llvm-lto` | 10.9 ± 0.4 | 10.0 | 12.2 | 1.05 ± 0.07 |
+| `Osize-swift-llvm-lto` | 10.8 ± 0.6 | 9.5 | 12.8 | 1.04 ± 0.07 |
+| `Osize-swift-lto` | 10.9 ± 0.6 | 9.7 | 12.3 | 1.05 ± 0.07 |
+| `Osize` | 10.3 ± 0.5 | 9.5 | 13.1 | 1.00 |
+
+
 
 ### RxSwift
+
 <table>
 <tr>
    <td rowspan=2>Variant</td>
@@ -218,3 +254,19 @@ $ ./utils/build-script path/to/swiftc
 </table>
 
 
+#### Runtime Performance
+
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
+|:---|---:|---:|---:|---:|
+| `O-llvm-lto` | 9.5 ± 0.6 | 8.4 | 11.5 | 1.05 ± 0.08 |
+| `O-swift-llvm-lto` | 9.2 ± 0.4 | 8.4 | 10.8 | 1.01 ± 0.06 |
+| `O-swift-lto` | 9.3 ± 0.5 | 8.2 | 11.2 | 1.00 |
+| `O` | 9.4 ± 0.7 | 8.0 | 11.6 | 1.04 ± 0.09 |
+| `Onone-llvm-lto` | 9.7 ± 0.5 | 8.7 | 11.1 | 1.07 ± 0.07 |
+| `Onone-swift-llvm-lto` | 9.7 ± 1.0 | 8.7 | 20.8 | 1.07 ± 0.12 |
+| `Onone-swift-lto` | 9.7 ± 0.6 | 8.5 | 11.5 | 1.07 ± 0.08 |
+| `Onone` | 9.8 ± 0.8 | 8.6 | 14.3 | 1.08 ± 0.09 |
+| `Osize-llvm-lto` | 9.3 ± 0.5 | 8.6 | 11.1 | 1.03 ± 0.07 |
+| `Osize-swift-llvm-lto` | 9.7 ± 0.5 | 8.7 | 11.1 | 1.00 |
+| `Osize-swift-lto` | 9.2 ± 0.6 | 8.2 | 11.1 | 1.01 ± 0.08 |
+| `Osize` | 9.1 ± 0.4 | 8.3 | 10.3 | 1.00 |
