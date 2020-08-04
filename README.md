@@ -79,7 +79,7 @@ $ ./utils/build-script path/to/swiftc
 
 #### Runtime Performance
 
-| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
 | `Onone` | 12.1 ± 0.5 | 11.1 | 14.8 | 1.07 ± 0.06 |
 | `Onone-llvm-lto` | 11.6 ± 0.8 | 10.6 | 16.7 | 1.02 ± 0.08 |
@@ -87,7 +87,7 @@ $ ./utils/build-script path/to/swiftc
 | `Onone-swift-lto` | 12.3 ± 0.8 | 11.1 | 15.0 | 1.09 ± 0.08 |
 
 
-| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
 | `Onone` | 12.1 ± 0.5 | 11.1 | 14.8 | 1.07 ± 0.06 |
 | `Onone-llvm-lto` | 11.6 ± 0.8 | 10.6 | 16.7 | 1.02 ± 0.08 |
@@ -95,7 +95,7 @@ $ ./utils/build-script path/to/swiftc
 | `Onone-swift-lto` | 12.3 ± 0.8 | 11.1 | 15.0 | 1.09 ± 0.08 |
 
 
-| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
 | `Onone` | 12.1 ± 0.5 | 11.1 | 14.8 | 1.07 ± 0.06 |
 | `Onone-llvm-lto` | 11.6 ± 0.8 | 10.6 | 16.7 | 1.02 ± 0.08 |
@@ -175,7 +175,7 @@ $ ./utils/build-script path/to/swiftc
 
 #### Runtime Performance
 
-| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
 | `Onone` | 12.1 ± 0.5 | 11.1 | 14.8 | 1.07 ± 0.06 |
 | `Onone-llvm-lto` | 11.6 ± 0.8 | 10.6 | 16.7 | 1.02 ± 0.08 |
@@ -183,7 +183,7 @@ $ ./utils/build-script path/to/swiftc
 | `Onone-swift-lto` | 12.3 ± 0.8 | 11.1 | 15.0 | 1.09 ± 0.08 |
 
 
-| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
 | `O` | 10.0 ± 0.6 | 9.1 | 12.1 | 1.00 |
 | `O-llvm-lto` | 35.6 ± 356.6 | 9.3 | 5015.6 | 3.57 ± 35.78 |
@@ -191,7 +191,7 @@ $ ./utils/build-script path/to/swiftc
 | `O-swift-lto` | 10.1 ± 0.5 | 9.2 | 12.7 | 1.01 ± 0.08 |
 
 
-| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
 | `Osize` | 9.9 ± 0.6 | 9.0 | 13.2 | 1.00 |
 | `Osize-llvm-lto` | 10.0 ± 0.6 | 9.0 | 11.9 | 1.02 ± 0.09 |
@@ -273,7 +273,7 @@ $ ./utils/build-script path/to/swiftc
 
 #### Runtime Performance
 
-| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
 | `Onone` | 8.8 ± 0.4 | 8.1 | 11.2 | 1.00 |
 | `Onone-llvm-lto` | 9.2 ± 0.6 | 8.2 | 11.2 | 1.04 ± 0.08 |
@@ -281,7 +281,7 @@ $ ./utils/build-script path/to/swiftc
 | `Onone-swift-lto` | 8.9 ± 0.4 | 8.1 | 10.7 | 1.01 ± 0.06 |
 
 
-| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
 | `O` | 8.8 ± 0.6 | 7.9 | 11.2 | 1.02 ± 0.08 |
 | `O-llvm-lto` | 8.9 ± 0.6 | 7.9 | 11.1 | 1.04 ± 0.09 |
@@ -289,7 +289,7 @@ $ ./utils/build-script path/to/swiftc
 | `O-swift-lto` | 8.6 ± 0.4 | 8.0 | 10.0 | 1.00 |
 
 
-| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
 | `Osize` | 8.7 ± 0.6 | 7.8 | 10.7 | 1.00 ± 0.08 |
 | `Osize-llvm-lto` | 8.7 ± 0.4 | 7.9 | 9.8 | 1.00 |
