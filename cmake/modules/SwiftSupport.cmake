@@ -73,6 +73,8 @@ function(_emit_swift_object name)
     endforeach()
     if (TARGET "${dependency}.swiftmodule")
       list(APPEND dependency_targets "${dependency}.swiftmodule")
+    else()
+      list(APPEND dependency_targets "${dependency}")
     endif()
   endforeach()
 
@@ -163,7 +165,7 @@ function(add_swift_executable name)
     COMPILE_OPTIONS ${compile_options})
 
   set(driver_options)
-  foreach(option ${ASLE_LINKER_OPTIONS})
+  foreach(option ${ASE_LINKER_OPTIONS})
     list(APPEND driver_options "-Xlinker" "${option}")
   endforeach()
 

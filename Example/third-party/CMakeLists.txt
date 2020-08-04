@@ -8,9 +8,8 @@ elseif(LLVM_LTO)
   add_swift_llvm_lto_library(SwiftyJSON
     SOURCES ${SwiftyJSON_sources})
 else()
-  add_library(SwiftyJSON ${SwiftyJSON_sources})
-  set_target_properties(SwiftyJSON PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}")
+  add_swift_library(SwiftyJSON
+    SOURCES ${SwiftyJSON_sources})
 endif()
 
 # SwiftSyntax
@@ -39,11 +38,9 @@ elseif(LLVM_LTO)
     SOURCES ${SwiftSyntax_sources}
     SWIFT_MODULE_DEPENDS _CSwiftSyntax)
 else()
-  add_library(SwiftSyntax ${SwiftSyntax_sources})
-  target_link_libraries(SwiftSyntax _CSwiftSyntax)
-  set_target_properties(SwiftSyntax PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_BINARY_DIR}")
-  target_compile_options(SwiftSyntax PRIVATE "-whole-module-optimization")
+  add_swift_library(SwiftSyntax
+    SOURCES ${SwiftSyntax_sources}
+    SWIFT_MODULE_DEPENDS _CSwiftSyntax)
 endif()
 
 # RxSwift
