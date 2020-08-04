@@ -1,5 +1,50 @@
 # Swift LTO
 
+function(_emit_swiftmodule name)
+  cmake_parse_arguments(
+    ESM # prefix
+    "" # options
+    "" # single-value args
+    "SOURCES;SWIFT_MODULE_DEPENDS;COMPILE_OPTIONS" # multi-value args
+    ${ARGN})
+  set(compile_options "${ESM_COMPILE_OPTIONS}")
+
+  set(absolute_source_files)
+
+  foreach(file ${ESM_SOURCES})
+    get_filename_component(file_path ${file} PATH)
+    if(IS_ABSOLUTE "${file_path}")
+      list(APPEND absolute_source_files "${file}")
+    else()
+      list(APPEND absolute_source_files "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
+    endif()
+  endforeach()
+
+  set(dependency_targets)
+
+  foreach(dependency ${ESM_SWIFT_MODULE_DEPENDS})
+    set(include_dirs)
+    get_target_property(include_dirs ${dependency} INTERFACE_INCLUDE_DIRECTORIES)
+    foreach(dir ${include_dirs})
+      list(APPEND compile_options "-I${dir}")
+    endforeach()
+    if (TARGET "${dependency}")
+      list(APPEND dependency_targets "${dependency}")
+    endif()
+  endforeach()
+
+  add_custom_target(${name}.swiftmodule
+    DEPENDS ${ESM_SOURCES} ${dependency_targets}
+    COMMAND
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-module"
+        "-module-name" "${name}"
+        "-sdk" "$ENV{SDKROOT}"
+        "-emit-module-path" "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule"
+        ${absolute_source_files} ${compile_options}
+  )
+endfunction()
+
+
 function(_emit_swift_lto_intermediate_files name)
   cmake_parse_arguments(
     ESLIF # prefix
@@ -33,8 +78,8 @@ function(_emit_swift_lto_intermediate_files name)
     foreach(dir ${include_dirs})
       list(APPEND compile_options "-I${dir}")
     endforeach()
-    if (TARGET "${dependency}_ALL")
-      list(APPEND dependency_targets "${dependency}_ALL")
+    if (TARGET "${dependency}.swiftmodule")
+      list(APPEND dependency_targets "${dependency}.swiftmodule")
     endif()
   endforeach()
 
@@ -113,23 +158,24 @@ function(add_swift_lto_library name)
       list(APPEND self_include_dirs "${dir}")
     endforeach()
 
-    if (TARGET "${dependency}_ALL")
-      list(APPEND dependency_targets "${dependency}_ALL")
+    if (TARGET "${dependency}")
+      list(APPEND dependency_targets "${dependency}")
     endif()
   endforeach()
 
-  add_library(${name} ${ASLL_SOURCES})
-  target_link_libraries(${name} ${ASLL_SWIFT_MODULE_DEPENDS})
-  set_target_properties(${name} PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${self_include_dirs}")
+  _emit_swiftmodule(${name}
+    SOURCES ${ASLL_SOURCES}
+    SWIFT_MODULE_DEPENDS ${ASLL_SWIFT_MODULE_DEPENDS}
+    COMPILE_OPTIONS ${compile_options})
 
   _emit_swift_lto_intermediate_files(${name}
     SOURCES ${ASLL_SOURCES}
     SWIFT_MODULE_DEPENDS ${ASLL_SWIFT_MODULE_DEPENDS}
     COMPILE_OPTIONS ${compile_options})
 
-  add_custom_target("${name}_ALL"
-    DEPENDS ${name} "${name}_LTO" ${dependency_targets})
+  add_custom_target("${name}"
+    DEPENDS ${name}.swiftmodule "${name}_LTO" ${dependency_targets})
+  set_target_properties("${name}" PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${self_include_dirs}")
 endfunction()
 
 function(_merge_swift_module_summaries name)
@@ -292,8 +338,8 @@ function(_emit_swift_llvm_bc name)
     foreach(dir ${include_dirs})
       list(APPEND compile_options "-I${dir}")
     endforeach()
-    if (TARGET "${dependency}_ALL")
-      list(APPEND dependency_targets "${dependency}_ALL")
+    if (TARGET "${dependency}")
+      list(APPEND dependency_targets "${dependency}")
     endif()
   endforeach()
 
@@ -334,8 +380,8 @@ function(add_swift_llvm_lto_library name)
       list(APPEND self_include_dirs "${dir}")
     endforeach()
 
-    if (TARGET "${dependency}_ALL")
-      list(APPEND dependency_targets "${dependency}_ALL")
+    if (TARGET "${dependency}")
+      list(APPEND dependency_targets "${dependency}")
     endif()
   endforeach()
 
@@ -349,7 +395,7 @@ function(add_swift_llvm_lto_library name)
     SWIFT_MODULE_DEPENDS ${ASLL_SWIFT_MODULE_DEPENDS}
     COMPILE_OPTIONS ${compile_options})
 
-  add_custom_target("${name}_ALL"
+  add_custom_target("${name}"
     DEPENDS ${name} "${name}.bc" ${dependency_targets})
 endfunction()
 
