@@ -25,8 +25,10 @@ class AddOneToIntegerLiterals: SyntaxRewriter {
   }
 }
 
-let file = CommandLine.arguments[1]
-let url = URL(fileURLWithPath: file)
-let sourceFile = try SyntaxParser.parse(url)
+let source = """
+let x = 2
+let y = 3_000
+"""
+let sourceFile = try SyntaxParser.parse(source: source)
 let incremented = AddOneToIntegerLiterals().visit(sourceFile)
 print(incremented)
