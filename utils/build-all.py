@@ -1,28 +1,35 @@
 #!/usr/bin/python3
 
 import subprocess
-from subprocess import PIPE
+from multiprocessing import Pool
 import os
 import sys
 
-variants = [
-    "Onone", "Onone-swift-lto", "Onone-llvm-lto", "Onone-swift-llvm-lto",
-    "O"    , "O-swift-lto"    , "O-llvm-lto"    , "O-swift-llvm-lto"    ,
-    "Osize", "Osize-swift-lto", "Osize-llvm-lto", "Osize-swift-llvm-lto",
-]
+class Context:
+    def __init__(self, build_script, swiftc):
+        self.build_script = build_script
+        self.swiftc = swiftc
 
-swiftc = sys.argv[1]
-utils = os.path.dirname(__file__)
-build_script = os.path.join(utils, "build-script.sh")
+    def work(self, variant):
+        cmd = [self.build_script, variant, self.swiftc]
+        print("Execute", cmd)
+        proc = subprocess.run(cmd)
 
-procs = []
+def main():
+    variants = [
+        "Onone", "Onone-swift-lto", "Onone-llvm-lto", "Onone-swift-llvm-lto",
+        "O"    , "O-swift-lto"    , "O-llvm-lto"    , "O-swift-llvm-lto"    ,
+        "Osize", "Osize-swift-lto", "Osize-llvm-lto", "Osize-swift-llvm-lto",
+    ]
 
-for variant in variants:
-    cmd = "{} {} {}".format(build_script, variant, swiftc)
-    print("Execute", cmd)
-    proc = subprocess.Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE, text=True)
-    procs.append(proc)
+    swiftc = sys.argv[1]
+    utils = os.path.dirname(__file__)
+    build_script = os.path.join(utils, "build-script.sh")
 
-for proc in procs:
-    print("Waiting ", proc.args)
-    proc.communicate()
+    context = Context(build_script, swiftc)
+
+    with Pool(8) as p:
+        p.map(context.work, variants)
+
+if __name__ == '__main__':
+    main()

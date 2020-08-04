@@ -233,18 +233,19 @@ function(add_swift_lto_executable name)
   _merge_swift_module_summaries(${name}
     SWIFT_MODULES ${ASLE_SWIFT_MODULE_DEPENDS};${name})
 
-  set(link_objects)
+  set(dependency_targets)
   set(absolute_link_objects)
   foreach(dependency ${ASLE_SWIFT_MODULE_DEPENDS})
     _lower_and_optimize_sib_to_object(${dependency}
       MERGED_SUMMARY "${name}.swiftmodule.merged-summary")
-    list(APPEND link_objects "${dependency}.o")
+    list(APPEND dependency_targets "${dependency}.o")
+    list(APPEND dependency_targets "${dependency}")
     list(APPEND absolute_link_objects "${CMAKE_CURRENT_BINARY_DIR}/${dependency}.o")
   endforeach()
 
   _lower_and_optimize_sib_to_object(${name}
     MERGED_SUMMARY "${name}.swiftmodule.merged-summary")
-  list(APPEND link_objects "${name}.o")
+  list(APPEND dependency_targets "${name}.o")
   list(APPEND absolute_link_objects "${CMAKE_CURRENT_BINARY_DIR}/${name}.o")
 
   set(driver_options)
@@ -253,7 +254,7 @@ function(add_swift_lto_executable name)
   endforeach()
 
   add_custom_target(${name}
-    DEPENDS ${link_objects}
+    DEPENDS ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}"
         ${absolute_link_objects}
@@ -342,10 +343,10 @@ function(add_swift_llvm_lto_library name)
     endif()
   endforeach()
 
-  add_library(${name} ${ASLL_SOURCES})
-  target_link_libraries(${name} ${ASLL_SWIFT_MODULE_DEPENDS})
-  set_target_properties(${name} PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${self_include_dirs}")
+  _emit_swiftmodule(${name}
+    SOURCES ${ASLL_SOURCES}
+    SWIFT_MODULE_DEPENDS ${ASLL_SWIFT_MODULE_DEPENDS}
+    COMPILE_OPTIONS ${compile_options})
 
   _emit_swift_llvm_bc(${name}
     SOURCES ${ASLL_SOURCES}
@@ -353,7 +354,8 @@ function(add_swift_llvm_lto_library name)
     COMPILE_OPTIONS ${compile_options})
 
   add_custom_target("${name}"
-    DEPENDS ${name} "${name}.bc" ${dependency_targets})
+    DEPENDS "${name}.swiftmodule" "${name}.bc" ${dependency_targets})
+  set_target_properties("${name}" PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${self_include_dirs}")
 endfunction()
 
 
@@ -375,7 +377,7 @@ function(add_llvm_lto_executable name)
   set(dependency_targets)
   set(absolute_link_objects)
   foreach(dependency ${ASLE_SWIFT_MODULE_DEPENDS})
-    list(APPEND dependency_targets "${dependency}.bc")
+    list(APPEND dependency_targets "${dependency}.bc" ${dependency})
     set(bc_path)
     get_target_property(bc_path "${dependency}.bc" BITCODE_PATH)
     list(APPEND absolute_link_objects ${bc_path})
@@ -455,25 +457,25 @@ function(add_swift_llvm_lto_executable name)
   _merge_swift_module_summaries(${name}
     SWIFT_MODULES ${ASLE_SWIFT_MODULE_DEPENDS};${name})
 
-  set(link_objects)
+  set(dependency_targets)
   set(absolute_link_objects)
   foreach(dependency ${ASLE_SWIFT_MODULE_DEPENDS})
     _lower_and_optimize_sib_to_bc(${dependency}
       MERGED_SUMMARY "${name}.swiftmodule.merged-summary")
-    list(APPEND link_objects "${dependency}.bc")
+    list(APPEND dependency_targets "${dependency}.bc" ${dependency})
     list(APPEND absolute_link_objects "${CMAKE_CURRENT_BINARY_DIR}/${dependency}.bc")
   endforeach()
 
   _lower_and_optimize_sib_to_bc(${name}
     MERGED_SUMMARY "${name}.swiftmodule.merged-summary")
 
-  list(APPEND link_objects "${name}.bc")
+  list(APPEND dependency_targets "${name}.bc")
   list(APPEND absolute_link_objects "${CMAKE_CURRENT_BINARY_DIR}/${name}.bc")
 
   get_filename_component(toolchain ${CMAKE_Swift_COMPILER}/../.. ABSOLUTE)
   set(xcode_toolchain /Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr)
   add_custom_target(${name}
-    DEPENDS ${link_objects}
+    DEPENDS ${dependency_targets}
     COMMAND
       "ld"
         ${absolute_link_objects}
