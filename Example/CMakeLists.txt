@@ -68,6 +68,8 @@ else()
   target_link_libraries(SwiftSyntaxExample SwiftSyntax _CSwiftSyntax _InternalSwiftSyntaxParser)
   target_link_directories(SwiftSyntaxExample PRIVATE "/Applications/Xcode-11.4.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/")
 
-  add_executable(RxSwiftExample ${RxSwiftExample_sources})
-  target_link_libraries(RxSwiftExample RxSwift)
+  add_swift_executable(RxSwiftExample
+    SOURCES ${RxSwiftExample_sources}
+    SWIFT_MODULE_DEPENDS RxSwift)
+  # target_link_libraries(RxSwiftExample RxSwift)
 endif()
