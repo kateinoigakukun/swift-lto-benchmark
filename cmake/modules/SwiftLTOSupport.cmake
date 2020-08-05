@@ -27,8 +27,8 @@ function(_emit_swift_lto_intermediate_files name)
     foreach(dir ${include_dirs})
       list(APPEND compile_options "-I${dir}")
     endforeach()
-    if (TARGET "${dependency}.swiftmodule")
-      list(APPEND dependency_targets "${dependency}.swiftmodule")
+    if (TARGET "${dependency}-swiftmodule")
+      list(APPEND dependency_targets "${dependency}-swiftmodule")
     endif()
   endforeach()
 
@@ -124,7 +124,7 @@ function(add_swift_lto_library name)
     COMPILE_OPTIONS ${compile_options})
 
   add_custom_target("${name}"
-    DEPENDS ${name}.swiftmodule "${name}_LTO" ${dependency_targets})
+    DEPENDS ${name}-swiftmodule "${name}_LTO" ${dependency_targets})
   set_target_properties("${name}" PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${self_include_dirs}")
 endfunction()
 
@@ -341,7 +341,7 @@ function(add_swift_llvm_lto_library name)
     COMPILE_OPTIONS ${compile_options})
 
   add_custom_target("${name}"
-    DEPENDS "${name}.swiftmodule" "${name}.bc" ${dependency_targets})
+    DEPENDS "${name}-swiftmodule" "${name}.bc" ${dependency_targets})
   set_target_properties("${name}" PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${self_include_dirs}")
 endfunction()
 
