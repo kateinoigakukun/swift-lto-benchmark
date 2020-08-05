@@ -3,11 +3,17 @@ include(SwiftLTOSupport)
 add_subdirectory(third-party)
 
 set(xcode_toolchain /Applications/Xcode-11.4.1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr)
+set(benchmark_linker_options
+  "-rpath" "${CMAKE_CURRENT_BINARY_DIR}/../lib"
+  "-L${CMAKE_CURRENT_BINARY_DIR}/../lib"
+  "-lBenchmark")
 
 set(SwiftyJSONExample_sources SwiftyJSONExample.swift)
+set(SwiftyJSONExample_linker_options ${benchmark_linker_options})
 
 set(SwiftSyntaxExample_sources SwiftSyntaxExample.swift)
 set(SwiftSyntaxExample_linker_options
+  ${benchmark_linker_options}
   "-L${xcode_toolchain}/lib/swift/macosx/"
   "-L${CMAKE_CURRENT_BINARY_DIR}/third-party"
   "-l_CSwiftSyntax"
@@ -15,11 +21,13 @@ set(SwiftSyntaxExample_linker_options
   "-rpath" "${xcode_toolchain}/lib/swift/macosx")
 
 set(RxSwiftExample_sources RxSwiftExample.swift)
+set(RxSwiftExample_linker_options ${benchmark_linker_options})
 
 if(SWIFT_LTO AND LLVM_LTO)
   add_swift_llvm_lto_executable(SwiftyJSONExample
     SOURCES ${SwiftyJSONExample_sources}
-    SWIFT_MODULE_DEPENDS SwiftyJSON)
+    SWIFT_MODULE_DEPENDS SwiftyJSON
+    LINKER_OPTIONS ${SwiftyJSONExample_linker_options})
 
   add_swift_llvm_lto_executable(SwiftSyntaxExample
     SOURCES ${SwiftSyntaxExample_sources}
@@ -28,11 +36,13 @@ if(SWIFT_LTO AND LLVM_LTO)
 
   add_swift_llvm_lto_executable(RxSwiftExample
     SOURCES ${RxSwiftExample_sources}
-    SWIFT_MODULE_DEPENDS RxSwift)
+    SWIFT_MODULE_DEPENDS RxSwift
+    LINKER_OPTIONS ${RxSwiftExample_linker_options})
 elseif(SWIFT_LTO)
   add_swift_lto_executable(SwiftyJSONExample
     SOURCES ${SwiftyJSONExample_sources}
-    SWIFT_MODULE_DEPENDS SwiftyJSON)
+    SWIFT_MODULE_DEPENDS SwiftyJSON
+    LINKER_OPTIONS ${SwiftyJSONExample_linker_options})
 
   add_swift_lto_executable(SwiftSyntaxExample
     SOURCES ${SwiftSyntaxExample_sources}
@@ -41,11 +51,13 @@ elseif(SWIFT_LTO)
 
   add_swift_lto_executable(RxSwiftExample
     SOURCES ${RxSwiftExample_sources}
-    SWIFT_MODULE_DEPENDS RxSwift)
+    SWIFT_MODULE_DEPENDS RxSwift
+    LINKER_OPTIONS ${RxSwiftExample_linker_options})
 elseif(LLVM_LTO)
   add_llvm_lto_executable(SwiftyJSONExample
     SOURCES ${SwiftyJSONExample_sources}
-    SWIFT_MODULE_DEPENDS SwiftyJSON)
+    SWIFT_MODULE_DEPENDS SwiftyJSON
+    LINKER_OPTIONS ${SwiftyJSONExample_linker_options})
 
   add_llvm_lto_executable(SwiftSyntaxExample
     SOURCES ${SwiftSyntaxExample_sources}
@@ -54,11 +66,13 @@ elseif(LLVM_LTO)
 
   add_llvm_lto_executable(RxSwiftExample
     SOURCES ${RxSwiftExample_sources}
-    SWIFT_MODULE_DEPENDS RxSwift)
+    SWIFT_MODULE_DEPENDS RxSwift
+    LINKER_OPTIONS ${RxSwiftExample_linker_options})
 else()
   add_swift_executable(SwiftyJSONExample
     SOURCES ${SwiftyJSONExample_sources}
-    SWIFT_MODULE_DEPENDS SwiftyJSON)
+    SWIFT_MODULE_DEPENDS SwiftyJSON
+    LINKER_OPTIONS ${SwiftyJSONExample_linker_options})
 
   add_swift_executable(SwiftSyntaxExample
     SOURCES ${SwiftSyntaxExample_sources}
@@ -67,5 +81,6 @@ else()
 
   add_swift_executable(RxSwiftExample
     SOURCES ${RxSwiftExample_sources}
-    SWIFT_MODULE_DEPENDS RxSwift)
+    SWIFT_MODULE_DEPENDS RxSwift
+    LINKER_OPTIONS ${RxSwiftExample_linker_options})
 endif()

@@ -65,6 +65,7 @@ pushd "${ROOT_PATH}/build/${VARIANT}"
 cmake ../../ -GNinja $(cmake_options $VARIANT) \
      -DCMAKE_Swift_COMPILER=$SWIFTC
 if [[ ! "${SKIP_BUILD}" ]]; then
-    ninja benchmark
+    ninja Benchmark
+    ninja examples
 fi
 popd

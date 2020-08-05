@@ -1,3 +1,7 @@
+
+@_silgen_name("_runBenchmark")
+public func runBenchmark(_ fn: (Int) -> Void) -> Void
+
 import RxSwift
 import Foundation
 
@@ -39,15 +43,22 @@ extension GitHubSearchRepositoriesAPI {
 
 let api = GitHubSearchRepositoriesAPI()
 
-_ = api.search(query: "Swift").map { try $0.get() }
-    .map { $0.filter { $0.stargazersCount > 100 } }
-    .asObservable()
-    .flatMap { Observable.from($0) }
-    .subscribe(
-        onNext: { (repository: Repository) in
-            print(repository.fullName)
-        },
-        onError: { error in
-            dump(error)
-        }
-    )
+@inline(never)
+func blackhole<T>(_: T) {}
+
+runBenchmark { n in
+    for _ in 0..<n {
+        _ = api.search(query: "Swift").map { try $0.get() }
+            .map { $0.filter { $0.stargazersCount > 100 } }
+            .asObservable()
+            .flatMap { Observable.from($0) }
+            .subscribe(
+                onNext: { (repository: Repository) in
+                    blackhole(repository.fullName)
+                },
+                onError: { error in
+                    dump(error)
+                }
+            )
+    }
+}

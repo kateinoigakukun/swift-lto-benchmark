@@ -1,3 +1,6 @@
+@_silgen_name("_runBenchmark")
+public func runBenchmark(_ fn: (Int) -> Void) -> Void
+
 import SwiftyJSON
 
 
@@ -23,10 +26,14 @@ let json = """
 }
 """
 
-if let data = json.data(using: .utf8) {
-    if let json = try? JSON(data: data) {
+runBenchmark { n in
+  for _ in 0..<n {
+    if let data = json.data(using: .utf8) {
+      if let json = try? JSON(data: data) {
         for item in json["people"].arrayValue {
-            print(item["firstName"].stringValue)
+            _ = item["firstName"].stringValue
         }
+      }
     }
+  }
 }

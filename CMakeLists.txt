@@ -9,7 +9,8 @@ project(swift-lto-benchmark
 set(SWIFT_LTO TRUE CACHE BOOL "Swift Link time optimization mode")
 set(LLVM_LTO  TRUE CACHE BOOL "LLVM Link time optimization mode")
 
+add_subdirectory(lib)
 add_subdirectory(Example)
 
-add_custom_target(benchmark
+add_custom_target(examples
   DEPENDS SwiftyJSONExample SwiftSyntaxExample RxSwiftExample)

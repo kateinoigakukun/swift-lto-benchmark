@@ -1,3 +1,6 @@
+@_silgen_name("_runBenchmark")
+public func runBenchmark(_ fn: (Int) -> Void) -> Void
+
 import SwiftSyntax
 import Foundation
 
@@ -29,6 +32,11 @@ let source = """
 let x = 2
 let y = 3_000
 """
-let sourceFile = try SyntaxParser.parse(source: source)
-let incremented = AddOneToIntegerLiterals().visit(sourceFile)
-print(incremented)
+
+runBenchmark { n in
+  for _ in 0..<n {
+    let sourceFile = try SyntaxParser.parse(source: source)
+    let incremented = AddOneToIntegerLiterals().visit(sourceFile)
+    _ = incremented
+  }
+}
