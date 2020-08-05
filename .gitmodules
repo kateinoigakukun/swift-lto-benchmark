@@ -7,3 +7,6 @@
 [submodule "Example/third-party/RxSwift"]
 	path = Example/third-party/RxSwift
 	url = https://github.com/ReactiveX/RxSwift.git
+[submodule "Example/third-party/swift"]
+	path = Example/third-party/swift
+	url = file:///Users/kateinoigakukun/projects/swift-source-2/swift
