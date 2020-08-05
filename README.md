@@ -23,23 +23,23 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
     <td>Onone</td>
-    <td>306.3 KB</td>
-    <td>250.5 KB</td>
-    <td>234.0 KB</td>
-    <td>202.2 KB</td>
+    <td>307.0 KB</td>
+    <td>251.2 KB</td>
+    <td>250.7 KB</td>
+    <td>202.8 KB</td>
 </tr>
 <tr>
     <td>O</td>
-    <td>309.8 KB</td>
+    <td>309.9 KB</td>
     <td>253.6 KB</td>
-    <td>299.2 KB</td>
-    <td>233.1 KB</td>
+    <td>299.3 KB</td>
+    <td>233.2 KB</td>
 </tr>
 <tr>
     <td>Osize</td>
     <td>261.8 KB</td>
-    <td>221.2 KB</td>
-    <td>251.8 KB</td>
+    <td>221.1 KB</td>
+    <td>251.9 KB</td>
     <td>203.0 KB</td>
 </tr>
 </table>
@@ -55,54 +55,161 @@ $ ./utils/build-script path/to/swiftc
     <td>LLVM LTO</td>
     <td>Swift & LLVM LTO</td>
 </tr>
-<tr>
+    <tr>
     <td>Onone</td>
-    <td>7.56 s</td>
-    <td>9.54 s</td>
-    <td>12.53 s</td>
-    <td>11.61 s</td>
+    <td>6.03 s</td>
+    <td>7.53 s</td>
+    <td>10.40 s</td>
+    <td>8.88 s</td>
 </tr>
-<tr>
+    <tr>
     <td>O</td>
-    <td>26.60 s</td>
-    <td>25.07 s</td>
-    <td>28.93 s</td>
-    <td>25.27 s</td>
+    <td>23.87 s</td>
+    <td>22.49 s</td>
+    <td>24.37 s</td>
+    <td>22.75 s</td>
 </tr>
-<tr>
+    <tr>
     <td>Osize</td>
-    <td>9.43 s</td>
-    <td>10.45 s</td>
-    <td>9.80 s</td>
-    <td>8.80 s</td>
+    <td>9.75 s</td>
+    <td>10.95 s</td>
+    <td>9.86 s</td>
+    <td>8.81 s</td>
 </tr>
 </table>
 
 #### Runtime Performance
+<table>
+<tr><td colspan=7>Onone</td></tr>
+<tr>
+  <td>Variant</td>
+  <td>MIN</td><td>MAX</td><td>MEAN</td><td>SD</td><td>MEDIAN</td><td>MAX_RSS(B)</td>
+</tr>
+<tr>
+  <td>non-LTO</td>
+  <td>52.4</td>
+    <td>61.6</td>
+    <td>56.0</td>
+    <td>2.0</td>
+    <td>56.5</td>
+    <td>4149248</td>
+</tr>
+<tr>
+  <td>Swift LTO</td>
+  <td>50.9</td>
+    <td>61.4</td>
+    <td>54.0</td>
+    <td>2.0</td>
+    <td>53.8</td>
+    <td>4120576</td>
+</tr>
+<tr>
+  <td>LLVM LTO</td>
+  <td>49.1</td>
+    <td>61.0</td>
+    <td>53.0</td>
+    <td>2.0</td>
+    <td>52.7</td>
+    <td>4087808</td>
+</tr>
+<tr>
+  <td>Swift & LLVM LTO</td>
+  <td>49.7</td>
+    <td>57.5</td>
+    <td>53.0</td>
+    <td>2.0</td>
+    <td>52.7</td>
+    <td>4046848</td>
+</tr>
+</table>
 
-| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
-|:---|---:|---:|---:|---:|
-| `Onone` | 12.1 ± 0.5 | 11.1 | 14.8 | 1.07 ± 0.06 |
-| `Onone-llvm-lto` | 11.6 ± 0.8 | 10.6 | 16.7 | 1.02 ± 0.08 |
-| `Onone-swift-llvm-lto` | 11.3 ± 0.4 | 10.5 | 13.0 | 1.00 |
-| `Onone-swift-lto` | 12.3 ± 0.8 | 11.1 | 15.0 | 1.09 ± 0.08 |
+<table>
+<tr><td colspan=7>O</td></tr>
+<tr>
+  <td>Variant</td>
+  <td>MIN</td><td>MAX</td><td>MEAN</td><td>SD</td><td>MEDIAN</td><td>MAX_RSS(B)</td>
+</tr>
+<tr>
+  <td>non-LTO</td>
+  <td>34.3</td>
+    <td>40.3</td>
+    <td>37.0</td>
+    <td>1.0</td>
+    <td>37.2</td>
+    <td>4091904</td>
+</tr>
+<tr>
+  <td>Swift LTO</td>
+  <td>34.0</td>
+    <td>42.6</td>
+    <td>37.0</td>
+    <td>1.0</td>
+    <td>36.8</td>
+    <td>4022272</td>
+</tr>
+<tr>
+  <td>LLVM LTO</td>
+  <td>33.8</td>
+    <td>44.2</td>
+    <td>36.0</td>
+    <td>1.0</td>
+    <td>36.3</td>
+    <td>4038656</td>
+</tr>
+<tr>
+  <td>Swift & LLVM LTO</td>
+  <td>35.4</td>
+    <td>42.5</td>
+    <td>38.0</td>
+    <td>2.0</td>
+    <td>38.2</td>
+    <td>4055040</td>
+</tr>
+</table>
 
-
-| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
-|:---|---:|---:|---:|---:|
-| `Onone` | 12.1 ± 0.5 | 11.1 | 14.8 | 1.07 ± 0.06 |
-| `Onone-llvm-lto` | 11.6 ± 0.8 | 10.6 | 16.7 | 1.02 ± 0.08 |
-| `Onone-swift-llvm-lto` | 11.3 ± 0.4 | 10.5 | 13.0 | 1.00 |
-| `Onone-swift-lto` | 12.3 ± 0.8 | 11.1 | 15.0 | 1.09 ± 0.08 |
-
-
-| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
-|:---|---:|---:|---:|---:|
-| `Onone` | 12.1 ± 0.5 | 11.1 | 14.8 | 1.07 ± 0.06 |
-| `Onone-llvm-lto` | 11.6 ± 0.8 | 10.6 | 16.7 | 1.02 ± 0.08 |
-| `Onone-swift-llvm-lto` | 11.3 ± 0.4 | 10.5 | 13.0 | 1.00 |
-| `Onone-swift-lto` | 12.3 ± 0.8 | 11.1 | 15.0 | 1.09 ± 0.08 |
-
+<table>
+<tr><td colspan=7>Osize</td></tr>
+<tr>
+  <td>Variant</td>
+  <td>MIN</td><td>MAX</td><td>MEAN</td><td>SD</td><td>MEDIAN</td><td>MAX_RSS(B)</td>
+</tr>
+<tr>
+  <td>non-LTO</td>
+  <td>36.4</td>
+    <td>63.9</td>
+    <td>41.0</td>
+    <td>3.0</td>
+    <td>40.0</td>
+    <td>4235264</td>
+</tr>
+<tr>
+  <td>Swift LTO</td>
+  <td>36.5</td>
+    <td>53.5</td>
+    <td>40.0</td>
+    <td>3.0</td>
+    <td>39.2</td>
+    <td>4296704</td>
+</tr>
+<tr>
+  <td>LLVM LTO</td>
+  <td>36.9</td>
+    <td>46.6</td>
+    <td>40.0</td>
+    <td>2.0</td>
+    <td>39.3</td>
+    <td>4059136</td>
+</tr>
+<tr>
+  <td>Swift & LLVM LTO</td>
+  <td>35.7</td>
+    <td>44.2</td>
+    <td>39.0</td>
+    <td>2.0</td>
+    <td>39.2</td>
+    <td>3997696</td>
+</tr>
+</table>
 
 
 ### SwiftSyntax
@@ -151,58 +258,164 @@ $ ./utils/build-script path/to/swiftc
     <td>LLVM LTO</td>
     <td>Swift & LLVM LTO</td>
 </tr>
-<tr>
+    <tr>
     <td>Onone</td>
-    <td>129.03 s</td>
-    <td>113.57 s</td>
-    <td>197.40 s</td>
-    <td>162.43 s</td>
+    <td>128.39 s</td>
+    <td>112.43 s</td>
+    <td>200.08 s</td>
+    <td>160.51 s</td>
 </tr>
-<tr>
+    <tr>
     <td>O</td>
-    <td>465.21 s</td>
-    <td>418.91 s</td>
-    <td>470.46 s</td>
-    <td>422.55 s</td>
+    <td>461.30 s</td>
+    <td>411.96 s</td>
+    <td>459.95 s</td>
+    <td>419.98 s</td>
 </tr>
-<tr>
+    <tr>
     <td>Osize</td>
-    <td>347.92 s</td>
-    <td>314.04 s</td>
-    <td>329.84 s</td>
-    <td>288.65 s</td>
+    <td>345.28 s</td>
+    <td>312.44 s</td>
+    <td>328.46 s</td>
+    <td>288.00 s</td>
 </tr>
 </table>
 
 #### Runtime Performance
+<table>
+<tr><td colspan=7>Onone</td></tr>
+<tr>
+  <td>Variant</td>
+  <td>MIN</td><td>MAX</td><td>MEAN</td><td>SD</td><td>MEDIAN</td><td>MAX_RSS(B)</td>
+</tr>
+<tr>
+  <td>non-LTO</td>
+  <td>474.9</td>
+    <td>557.3</td>
+    <td>491.0</td>
+    <td>11.0</td>
+    <td>491.1</td>
+    <td>2363392</td>
+</tr>
+<tr>
+  <td>Swift LTO</td>
+  <td>423.6</td>
+    <td>510.4</td>
+    <td>436.0</td>
+    <td>12.0</td>
+    <td>434.1</td>
+    <td>3018752</td>
+</tr>
+<tr>
+  <td>LLVM LTO</td>
+  <td>342.4</td>
+    <td>459.7</td>
+    <td>364.0</td>
+    <td>20.0</td>
+    <td>356.7</td>
+    <td>2154496</td>
+</tr>
+<tr>
+  <td>Swift & LLVM LTO</td>
+  <td>342.4</td>
+    <td>411.0</td>
+    <td>364.0</td>
+    <td>18.0</td>
+    <td>355.2</td>
+    <td>1921024</td>
+</tr>
+</table>
 
-| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
-|:---|---:|---:|---:|---:|
-| `Onone` | 12.1 ± 0.5 | 11.1 | 14.8 | 1.07 ± 0.06 |
-| `Onone-llvm-lto` | 11.6 ± 0.8 | 10.6 | 16.7 | 1.02 ± 0.08 |
-| `Onone-swift-llvm-lto` | 11.3 ± 0.4 | 10.5 | 13.0 | 1.00 |
-| `Onone-swift-lto` | 12.3 ± 0.8 | 11.1 | 15.0 | 1.09 ± 0.08 |
+<table>
+<tr><td colspan=7>O</td></tr>
+<tr>
+  <td>Variant</td>
+  <td>MIN</td><td>MAX</td><td>MEAN</td><td>SD</td><td>MEDIAN</td><td>MAX_RSS(B)</td>
+</tr>
+<tr>
+  <td>non-LTO</td>
+  <td>65.5</td>
+    <td>74.2</td>
+    <td>70.0</td>
+    <td>2.0</td>
+    <td>69.5</td>
+    <td>1355776</td>
+</tr>
+<tr>
+  <td>Swift LTO</td>
+  <td>65.9</td>
+    <td>80.7</td>
+    <td>71.0</td>
+    <td>3.0</td>
+    <td>70.1</td>
+    <td>1372160</td>
+</tr>
+<tr>
+  <td>LLVM LTO</td>
+  <td>66.2</td>
+    <td>78.3</td>
+    <td>72.0</td>
+    <td>2.0</td>
+    <td>71.7</td>
+    <td>1380352</td>
+</tr>
+<tr>
+  <td>Swift & LLVM LTO</td>
+  <td>66.0</td>
+    <td>81.5</td>
+    <td>72.0</td>
+    <td>3.0</td>
+    <td>71.0</td>
+    <td>1261568</td>
+</tr>
+</table>
 
-
-| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
-|:---|---:|---:|---:|---:|
-| `O` | 10.0 ± 0.6 | 9.1 | 12.1 | 1.00 |
-| `O-llvm-lto` | 35.6 ± 356.6 | 9.3 | 5015.6 | 3.57 ± 35.78 |
-| `O-swift-llvm-lto` | 10.5 ± 0.7 | 9.3 | 13.2 | 1.05 ± 0.09 |
-| `O-swift-lto` | 10.1 ± 0.5 | 9.2 | 12.7 | 1.01 ± 0.08 |
-
-
-| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
-|:---|---:|---:|---:|---:|
-| `Osize` | 9.9 ± 0.6 | 9.0 | 13.2 | 1.00 |
-| `Osize-llvm-lto` | 10.0 ± 0.6 | 9.0 | 11.9 | 1.02 ± 0.09 |
-| `Osize-swift-llvm-lto` | 10.2 ± 0.6 | 9.1 | 12.2 | 1.03 ± 0.09 |
-| `Osize-swift-lto` | 9.9 ± 0.3 | 9.2 | 11.4 | 1.00 ± 0.07 |
-
+<table>
+<tr><td colspan=7>Osize</td></tr>
+<tr>
+  <td>Variant</td>
+  <td>MIN</td><td>MAX</td><td>MEAN</td><td>SD</td><td>MEDIAN</td><td>MAX_RSS(B)</td>
+</tr>
+<tr>
+  <td>non-LTO</td>
+  <td>67.4</td>
+    <td>80.8</td>
+    <td>73.0</td>
+    <td>3.0</td>
+    <td>72.8</td>
+    <td>1396736</td>
+</tr>
+<tr>
+  <td>Swift LTO</td>
+  <td>67.1</td>
+    <td>80.1</td>
+    <td>71.0</td>
+    <td>2.0</td>
+    <td>71.4</td>
+    <td>1355776</td>
+</tr>
+<tr>
+  <td>LLVM LTO</td>
+  <td>66.9</td>
+    <td>79.3</td>
+    <td>71.0</td>
+    <td>3.0</td>
+    <td>70.9</td>
+    <td>1269760</td>
+</tr>
+<tr>
+  <td>Swift & LLVM LTO</td>
+  <td>65.3</td>
+    <td>77.4</td>
+    <td>70.0</td>
+    <td>2.0</td>
+    <td>69.4</td>
+    <td>1134592</td>
+</tr>
+</table>
 
 
 ### RxSwift
-
 <table>
 <tr>
    <td rowspan=2>Variant</td>
@@ -216,8 +429,8 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
     <td>Onone</td>
-    <td>2.8 MB</td>
-    <td>2.0 MB</td>
+    <td>2.7 MB</td>
+    <td>1.9 MB</td>
     <td>1.8 MB</td>
     <td>1.4 MB</td>
 </tr>
@@ -232,7 +445,7 @@ $ ./utils/build-script path/to/swiftc
     <td>Osize</td>
     <td>1.5 MB</td>
     <td>1.3 MB</td>
-    <td>1.5 MB</td>
+    <td>1.4 MB</td>
     <td>1.2 MB</td>
 </tr>
 </table>
@@ -248,51 +461,160 @@ $ ./utils/build-script path/to/swiftc
     <td>LLVM LTO</td>
     <td>Swift & LLVM LTO</td>
 </tr>
-<tr>
+    <tr>
     <td>Onone</td>
-    <td>36.82 s</td>
-    <td>35.01 s</td>
-    <td>51.21 s</td>
-    <td>45.95 s</td>
+    <td>36.08 s</td>
+    <td>33.17 s</td>
+    <td>48.85 s</td>
+    <td>43.67 s</td>
 </tr>
-<tr>
+    <tr>
     <td>O</td>
-    <td>67.94 s</td>
-    <td>64.33 s</td>
-    <td>73.02 s</td>
-    <td>66.49 s</td>
+    <td>65.72 s</td>
+    <td>60.80 s</td>
+    <td>63.86 s</td>
+    <td>63.07 s</td>
+</tr>
+    <tr>
+    <td>Osize</td>
+    <td>40.58 s</td>
+    <td>35.16 s</td>
+    <td>34.68 s</td>
+    <td>33.42 s</td>
+</tr>
+</table>
+
+#### Runtime Performance
+<table>
+<tr><td colspan=7>Onone</td></tr>
+<tr>
+  <td>Variant</td>
+  <td>MIN</td><td>MAX</td><td>MEAN</td><td>SD</td><td>MEDIAN</td><td>MAX_RSS(B)</td>
 </tr>
 <tr>
-    <td>Osize</td>
-    <td>40.80 s</td>
-    <td>36.32 s</td>
-    <td>34.83 s</td>
-    <td>31.79 s</td>
+  <td>non-LTO</td>
+  <td>74.2</td>
+    <td>99.3</td>
+    <td>80.0</td>
+    <td>3.0</td>
+    <td>79.2</td>
+    <td>815104</td>
+</tr>
+<tr>
+  <td>Swift LTO</td>
+  <td>71.9</td>
+    <td>85.5</td>
+    <td>77.0</td>
+    <td>2.0</td>
+    <td>76.5</td>
+    <td>839680</td>
+</tr>
+<tr>
+  <td>LLVM LTO</td>
+  <td>66.3</td>
+    <td>89.1</td>
+    <td>70.0</td>
+    <td>3.0</td>
+    <td>69.5</td>
+    <td>544768</td>
+</tr>
+<tr>
+  <td>Swift & LLVM LTO</td>
+  <td>64.6</td>
+    <td>74.9</td>
+    <td>68.0</td>
+    <td>2.0</td>
+    <td>68.3</td>
+    <td>430080</td>
+</tr>
+</table>
+
+<table>
+<tr><td colspan=7>O</td></tr>
+<tr>
+  <td>Variant</td>
+  <td>MIN</td><td>MAX</td><td>MEAN</td><td>SD</td><td>MEDIAN</td><td>MAX_RSS(B)</td>
+</tr>
+<tr>
+  <td>non-LTO</td>
+  <td>37.3</td>
+    <td>49.2</td>
+    <td>40.0</td>
+    <td>2.0</td>
+    <td>40.2</td>
+    <td>585728</td>
+</tr>
+<tr>
+  <td>Swift LTO</td>
+  <td>36.9</td>
+    <td>47.9</td>
+    <td>40.0</td>
+    <td>1.0</td>
+    <td>39.9</td>
+    <td>638976</td>
+</tr>
+<tr>
+  <td>LLVM LTO</td>
+  <td>35.6</td>
+    <td>46.6</td>
+    <td>39.0</td>
+    <td>2.0</td>
+    <td>38.9</td>
+    <td>462848</td>
+</tr>
+<tr>
+  <td>Swift & LLVM LTO</td>
+  <td>36.3</td>
+    <td>45.7</td>
+    <td>39.0</td>
+    <td>1.0</td>
+    <td>39.0</td>
+    <td>458752</td>
+</tr>
+</table>
+
+<table>
+<tr><td colspan=7>Osize</td></tr>
+<tr>
+  <td>Variant</td>
+  <td>MIN</td><td>MAX</td><td>MEAN</td><td>SD</td><td>MEDIAN</td><td>MAX_RSS(B)</td>
+</tr>
+<tr>
+  <td>non-LTO</td>
+  <td>37.4</td>
+    <td>48.4</td>
+    <td>41.0</td>
+    <td>2.0</td>
+    <td>40.8</td>
+    <td>552960</td>
+</tr>
+<tr>
+  <td>Swift LTO</td>
+  <td>38.0</td>
+    <td>46.2</td>
+    <td>40.0</td>
+    <td>1.0</td>
+    <td>40.3</td>
+    <td>540672</td>
+</tr>
+<tr>
+  <td>LLVM LTO</td>
+  <td>36.5</td>
+    <td>46.0</td>
+    <td>39.0</td>
+    <td>1.0</td>
+    <td>39.4</td>
+    <td>524288</td>
+</tr>
+<tr>
+  <td>Swift & LLVM LTO</td>
+  <td>36.4</td>
+    <td>46.5</td>
+    <td>39.0</td>
+    <td>1.0</td>
+    <td>38.8</td>
+    <td>495616</td>
 </tr>
 </table>
 
 
-#### Runtime Performance
-
-| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
-|:---|---:|---:|---:|---:|
-| `Onone` | 8.8 ± 0.4 | 8.1 | 11.2 | 1.00 |
-| `Onone-llvm-lto` | 9.2 ± 0.6 | 8.2 | 11.2 | 1.04 ± 0.08 |
-| `Onone-swift-llvm-lto` | 9.1 ± 0.6 | 8.2 | 11.0 | 1.03 ± 0.08 |
-| `Onone-swift-lto` | 8.9 ± 0.4 | 8.1 | 10.7 | 1.01 ± 0.06 |
-
-
-| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
-|:---|---:|---:|---:|---:|
-| `O` | 8.8 ± 0.6 | 7.9 | 11.2 | 1.02 ± 0.08 |
-| `O-llvm-lto` | 8.9 ± 0.6 | 7.9 | 11.1 | 1.04 ± 0.09 |
-| `O-swift-llvm-lto` | 9.0 ± 0.6 | 8.0 | 10.9 | 1.05 ± 0.08 |
-| `O-swift-lto` | 8.6 ± 0.4 | 8.0 | 10.0 | 1.00 |
-
-
-| Variant | Mean [ms] | Min [ms] | Max [ms] | Relative |
-|:---|---:|---:|---:|---:|
-| `Osize` | 8.7 ± 0.6 | 7.8 | 10.7 | 1.00 ± 0.08 |
-| `Osize-llvm-lto` | 8.7 ± 0.4 | 7.9 | 9.8 | 1.00 |
-| `Osize-swift-llvm-lto` | 8.9 ± 0.6 | 7.9 | 10.9 | 1.03 ± 0.08 |
-| `Osize-swift-lto` | 8.7 ± 0.4 | 7.8 | 10.9 | 1.00 ± 0.06 |
