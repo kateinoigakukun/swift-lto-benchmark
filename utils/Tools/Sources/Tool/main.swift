@@ -28,16 +28,25 @@ func runtimePerformanceTable(target: Target, opt: OptVariant) throws -> String {
     return values
   }
 
-  func row(_ lto: LTOVariant) throws -> String {
+  func row(_ lto: LTOVariant) -> String {
     let variant: Variant = (lto, opt)
-    let result = try runtimePerformance(target: target, variant: variant)
-    let values = valuesForResult(result)
-    return """
+    do {
+      let result = try runtimePerformance(target: target, variant: variant)
+      let values = valuesForResult(result)
+      return """
 <tr>
   <td>\(lto)</td>
   \(values.map { "<td>\($0)</td>" }.joined(separator: "\n    "))
 </tr>
 """
+    } catch {
+      return """
+<tr>
+  <td>\(lto)</td>
+  \(Array(repeating: "<td>-</td>", count: 6).joined(separator: "\n    "))
+</tr>
+"""
+    }
   }
   
   let headers = ["MIN", "MAX", "MEAN", "SD", "MEDIAN", "MAX_RSS(B)"]
