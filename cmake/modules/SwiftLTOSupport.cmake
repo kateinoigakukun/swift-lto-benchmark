@@ -173,10 +173,11 @@ function(_lower_and_optimize_sib_to_object target)
   add_custom_target(${target}.o
     DEPENDS ${LOSO_MERGED_SUMMARY} ${lto_target}
     COMMAND
-      "${CMAKE_Swift_COMPILER}" "-c" "${sib_path}"
-        "-Xfrontend" "-module-summary-path"
-        "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
-        "-Xfrontend" "-disable-diagnostic-passes"
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-c" "${sib_path}"
+        "-sdk" "$ENV{SDKROOT}"
+        "-module-summary-path"
+        "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
+        "-disable-diagnostic-passes"
         ${compile_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${target}.o"
   )
@@ -184,11 +185,11 @@ function(_lower_and_optimize_sib_to_object target)
   add_custom_target(${target}-lto.sil
     DEPENDS ${LOSO_MERGED_SUMMARY} ${lto_target}
     COMMAND
-      "${CMAKE_Swift_COMPILER}" "-emit-sil" "${sib_path}"
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-sil" "${sib_path}"
         "-module-name" "${target}"
-        "-Xfrontend" "-module-summary-path"
-        "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
-        "-Xfrontend" "-disable-diagnostic-passes"
+        "-module-summary-path"
+        "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
+        "-disable-diagnostic-passes"
         ${compile_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${target}-lto.sil"
   )
@@ -196,11 +197,11 @@ function(_lower_and_optimize_sib_to_object target)
   add_custom_target(${target}-lto.ll
     DEPENDS ${LOSO_MERGED_SUMMARY} ${lto_target}
     COMMAND
-      "${CMAKE_Swift_COMPILER}" "-emit-ir" "${sib_path}"
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-ir" "${sib_path}"
         "-module-name" "${target}"
-        "-Xfrontend" "-module-summary-path"
-        "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
-        "-Xfrontend" "-disable-diagnostic-passes"
+        "-module-summary-path"
+        "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
+        "-disable-diagnostic-passes"
         ${compile_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${target}-lto.ll"
   )

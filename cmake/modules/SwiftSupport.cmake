@@ -22,7 +22,6 @@ function(_emit_swiftmodule name)
 
   set(absolute_source_files)
   translate_to_absolute_paths(absolute_source_files "${ESM_SOURCES}")
-  message("${absolute_source_files}")
 
   set(dependency_targets)
 
@@ -37,7 +36,8 @@ function(_emit_swiftmodule name)
     endif()
   endforeach()
 
-  add_custom_target(${name}.swiftmodule
+  add_custom_command(
+    OUTPUT ${name}.swiftmodule
     DEPENDS ${ESM_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-module"
@@ -45,7 +45,9 @@ function(_emit_swiftmodule name)
         "-sdk" "$ENV{SDKROOT}"
         "-emit-module-path" "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule"
         ${absolute_source_files} ${compile_options}
+    COMMAND
   )
+  add_custom_target(${name}.swiftmodule DEPENDS ${name}.swiftmodule)
 endfunction()
 
 function(_emit_swift_object name)
