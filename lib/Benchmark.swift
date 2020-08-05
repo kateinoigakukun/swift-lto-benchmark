@@ -1,7 +1,7 @@
 import Foundation
 
 extension UInt64 {
-  var microseconds: Int { return Int(self / 1000) }
+  var microseconds: Double { return Double(self) / 1000 }
 }
 
 final class Timer {
@@ -29,18 +29,18 @@ func resourceUsage() -> rusage {
   return result
 }
 
-func measureSample(_ iterations: Int, _ fn: (Int) -> Void) -> Int {
+func measureSample(_ iterations: Int, _ fn: (Int) -> Void) -> Double {
   let timer = Timer()
   let start = timer.getTime()
   fn(iterations)
   let end = timer.getTime()
   let sampleTime = timer.diffTimeInNanoSeconds(from: start, to: end)
-  return sampleTime.microseconds / iterations
+  return sampleTime.microseconds / Double(iterations)
 }
 
 func measure(samples: Int, iterations: Int, _ fn: (Int) -> Void) -> BenchmarkResult {
   let baseline = resourceUsage()
-  var samplesData: [Int] = []
+  var samplesData: [Double] = []
   for _ in 0 ..< samples {
     samplesData.append(measureSample(iterations, fn))
   }

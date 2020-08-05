@@ -54,8 +54,8 @@ struct Stats {
     var variance: Double { return n < 2 ? 0.0 : S / Double(n - 1) }
     var standardDeviation: Double { return variance.squareRoot() }
 
-    static func collect(_ s: inout Stats, _ x: Int){
-        Stats.runningMeanVariance(&s, Double(x))
+    static func collect(_ s: inout Stats, _ x: Double){
+        Stats.runningMeanVariance(&s, x)
     }
 
     static func runningMeanVariance(_ s: inout Stats, _ x: Double){
@@ -73,6 +73,10 @@ func runtimePerformance(target: Target, variant: Variant) throws -> BenchmarkRes
   let pipe = Pipe()
   process.executableURL = executable
   process.standardOutput = pipe
+  process.environment = [
+    "SWIFT_LTO_BENCH_SAMPLES": "100",
+    "SWIFT_LTO_BENCH_ITERATIONS": "100",
+  ]
   process.launch()
   process.waitUntilExit()
   let outputData = pipe.fileHandleForReading.readDataToEndOfFile()

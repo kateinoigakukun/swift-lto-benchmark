@@ -35,7 +35,7 @@ let y = 3_000
 
 runBenchmark { n in
   for _ in 0..<n {
-    let sourceFile = try SyntaxParser.parse(source: source)
+    let sourceFile = try! SyntaxParser.parse(source: source)
     let incremented = AddOneToIntegerLiterals().visit(sourceFile)
     _ = incremented
   }

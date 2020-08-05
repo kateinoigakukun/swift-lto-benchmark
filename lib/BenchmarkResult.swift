@@ -1,4 +1,4 @@
 struct BenchmarkResult: Codable {
-  let samples: [Int]
+  let samples: [Double]
   let maxRSS: Int
 }

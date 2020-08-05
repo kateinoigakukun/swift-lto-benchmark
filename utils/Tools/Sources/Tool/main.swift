@@ -12,20 +12,20 @@ let projectDirectory = URL(fileURLWithPath: #file)
 func runtimePerformanceTable(target: Target, opt: OptVariant) throws -> String {
   func valuesForResult(_ result: BenchmarkResult) -> [String] {
     let samples = result.samples.sorted()
-    func median() -> Int {
+    func median() -> Double {
       let index = Swift.max(0, Int((Double(samples.count) * 0.5).rounded(.up)) - 1)
       return samples[index]
     }
     let stats = result.samples.reduce(into: Stats(), Stats.collect)
-    let values: [Int] = [
+    let values: [String] = [
       samples.first!,
       samples.last!,
-      Int(stats.mean.rounded()),
-      Int(stats.standardDeviation.rounded()),
+      stats.mean.rounded(),
+      stats.standardDeviation.rounded(),
       median(),
-      result.maxRSS
-    ]
-    return values.map { String($0) }
+    ].map { String(format: "%.1f", $0) }
+    + [String(result.maxRSS)]
+    return values
   }
 
   func row(_ lto: LTOVariant) throws -> String {
@@ -42,9 +42,14 @@ func runtimePerformanceTable(target: Target, opt: OptVariant) throws -> String {
   
   let headers = ["MIN", "MAX", "MEAN", "SD", "MEDIAN", "MAX_RSS(B)"]
   return """
-<tr><td colspan=6>\(opt)</td></tr>
-<tr>\(headers.map { "<td>\($0)</td>" })</tr>
+<table>
+<tr><td colspan=7>\(opt)</td></tr>
+<tr>
+  <td>Variant</td>
+  \(headers.map { "<td>\($0)</td>" }.joined())
+</tr>
 \(try LTOVariant.allCases.map(row).joined(separator: "\n"))
+</table>
 """
 }
 
