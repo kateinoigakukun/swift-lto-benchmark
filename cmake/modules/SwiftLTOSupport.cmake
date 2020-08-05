@@ -17,15 +17,7 @@ function(_emit_swift_lto_intermediate_files name)
     "${name}.swiftmodule.summary")
 
   set(absolute_source_files)
-
-  foreach(file ${ESLIF_SOURCES})
-    get_filename_component(file_path ${file} PATH)
-    if(IS_ABSOLUTE "${file_path}")
-      list(APPEND absolute_source_files "${file}")
-    else()
-      list(APPEND absolute_source_files "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
-    endif()
-  endforeach()
+  translate_to_absolute_paths(absolute_source_files ${ESLIF_SOURCES})
 
   set(dependency_targets)
 
@@ -278,15 +270,7 @@ function(_emit_swift_llvm_bc name)
   set(compile_options "${ESLB_COMPILE_OPTIONS}")
 
   set(absolute_source_files)
-
-  foreach(file ${ESLB_SOURCES})
-    get_filename_component(file_path ${file} PATH)
-    if(IS_ABSOLUTE "${file_path}")
-      list(APPEND absolute_source_files "${file}")
-    else()
-      list(APPEND absolute_source_files "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
-    endif()
-  endforeach()
+  translate_to_absolute_paths(absolute_source_files ${ESLB_SOURCES})
 
   set(dependency_targets)
 

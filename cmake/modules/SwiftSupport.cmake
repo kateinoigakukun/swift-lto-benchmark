@@ -1,3 +1,13 @@
+function translate_to_absolute_paths(result_var sources)
+  foreach(file ${sources})
+    get_filename_component(file_path ${file} PATH)
+    if(IS_ABSOLUTE "${file_path}")
+      list(APPEND ${result_var} "${file}")
+    else()
+      list(APPEND ${result_var} "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
+    endif()
+  endforeach()
+endfunction()
 
 function(_emit_swiftmodule name)
   cmake_parse_arguments(
@@ -9,15 +19,7 @@ function(_emit_swiftmodule name)
   set(compile_options "${ESM_COMPILE_OPTIONS}")
 
   set(absolute_source_files)
-
-  foreach(file ${ESM_SOURCES})
-    get_filename_component(file_path ${file} PATH)
-    if(IS_ABSOLUTE "${file_path}")
-      list(APPEND absolute_source_files "${file}")
-    else()
-      list(APPEND absolute_source_files "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
-    endif()
-  endforeach()
+  translate_to_absolute_paths(absolute_source_files ${ESM_SOURCES})
 
   set(dependency_targets)
 
@@ -53,15 +55,7 @@ function(_emit_swift_object name)
   set(compile_options "${ESO_COMPILE_OPTIONS}")
 
   set(absolute_source_files)
-
-  foreach(file ${ESO_SOURCES})
-    get_filename_component(file_path ${file} PATH)
-    if(IS_ABSOLUTE "${file_path}")
-      list(APPEND absolute_source_files "${file}")
-    else()
-      list(APPEND absolute_source_files "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
-    endif()
-  endforeach()
+  translate_to_absolute_paths(absolute_source_files ${ESO_SOURCES})
 
   set(dependency_targets)
 
