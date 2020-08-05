@@ -74,8 +74,8 @@ func runtimePerformance(target: Target, variant: Variant) throws -> BenchmarkRes
   process.executableURL = executable
   process.standardOutput = pipe
   process.environment = [
-    "SWIFT_LTO_BENCH_SAMPLES": "100",
-    "SWIFT_LTO_BENCH_ITERATIONS": "100",
+    "SWIFT_LTO_BENCH_SAMPLES": target.samples.description,
+    "SWIFT_LTO_BENCH_ITERATIONS": target.iterations.description,
   ]
   process.launch()
   process.waitUntilExit()

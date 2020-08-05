@@ -57,7 +57,7 @@ func runtimePerformanceTable(target: Target, opt: OptVariant) throws -> String {
   <td>Variant</td>
   \(headers.map { "<td>\($0)</td>" }.joined())
 </tr>
-\(try LTOVariant.allCases.map(row).joined(separator: "\n"))
+\(LTOVariant.allCases.map(row).joined(separator: "\n"))
 </table>
 """
 }
@@ -125,8 +125,15 @@ func benchmarkTable(target: Target) throws -> String {
 """
 }
 
-for target in Target.allCases {
+if CommandLine.arguments.count >= 2 {
+  let target = Target(rawValue: CommandLine.arguments[1])!
   print("### \(target)")
   print(try benchmarkTable(target: target))
   print("\n")
+} else {
+  for target in Target.allCases {
+    print("### \(target)")
+    print(try benchmarkTable(target: target))
+    print("\n")
+  }
 }

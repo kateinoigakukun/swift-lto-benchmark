@@ -33,6 +33,19 @@ enum Target: String, CaseIterable {
   case SwiftSyntax
   case SwiftNumerics
   case RxSwift
+  
+  var samples: Int {
+    return 100
+  }
+  
+  var iterations: Int {
+    switch self {
+    case .SwiftStdlib:
+      return 100
+    default:
+      return 100
+    }
+  }
 
   func isRelated(to ninjaTarget: String) -> Bool {
     switch self {
