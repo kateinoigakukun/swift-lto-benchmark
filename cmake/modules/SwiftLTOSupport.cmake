@@ -416,11 +416,12 @@ function(_lower_and_optimize_sib_to_bc target)
   add_custom_target(${target}.bc
     DEPENDS ${LOSB_MERGED_SUMMARY} ${lto_target}
     COMMAND
-      "${CMAKE_Swift_COMPILER}" "-emit-bc" "${sib_path}"
+      "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-bc" "${sib_path}"
+        "-sdk" "$ENV{SDKROOT}"
         "-lto=llvm-full"
-        "-Xfrontend" "-module-summary-path"
-        "-Xfrontend" "${CMAKE_CURRENT_BINARY_DIR}/${LOSB_MERGED_SUMMARY}"
-        "-Xfrontend" "-disable-diagnostic-passes"
+        "-module-summary-path"
+        "${CMAKE_CURRENT_BINARY_DIR}/${LOSB_MERGED_SUMMARY}"
+        "-disable-diagnostic-passes"
         ${compile_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${target}.bc"
   )

@@ -13,4 +13,4 @@ add_subdirectory(lib)
 add_subdirectory(Example)
 
 add_custom_target(examples
-  DEPENDS SwiftyJSONExample SwiftSyntaxExample RxSwiftExample)
+  DEPENDS SwiftyJSONExample SwiftSyntaxExample RxSwiftExample SwiftStdlibExample)
