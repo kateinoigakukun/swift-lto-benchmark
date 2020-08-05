@@ -54,9 +54,7 @@ func measure(samples: Int, iterations: Int, _ fn: (Int) -> Void) -> BenchmarkRes
 @_silgen_name("_runBenchmark")
 public func runBenchmark(_ fn: (Int) -> Void) -> Void {
   func getenvInt(_ name: String) -> Int? {
-    getenv("SWIFT_LTO_BENCH_SAMPLES").flatMap {
-      Int(String(cString: $0))
-    }
+    getenv(name).flatMap { Int(String(cString: $0)) }
   }
   let result = measure(
     samples: getenvInt("SWIFT_LTO_BENCH_SAMPLES") ?? 1000,
