@@ -11,9 +11,9 @@ set(benchmark_linker_options
 set(SwiftyJSONExample_sources SwiftyJSONExample.swift)
 set(SwiftyJSONExample_linker_options ${benchmark_linker_options})
 set(SwiftyJSONExample_args SwiftyJSONExample
-    SOURCES ${SwiftyJSONExample_sources}
-    SWIFT_MODULE_DEPENDS SwiftyJSON
-    LINKER_OPTIONS ${SwiftyJSONExample_linker_options})
+  SOURCES ${SwiftyJSONExample_sources}
+  SWIFT_MODULE_DEPENDS SwiftyJSON
+  LINKER_OPTIONS ${SwiftyJSONExample_linker_options})
 
 set(SwiftSyntaxExample_sources SwiftSyntaxExample.swift)
 set(SwiftSyntaxExample_linker_options
@@ -24,16 +24,27 @@ set(SwiftSyntaxExample_linker_options
   "-l_InternalSwiftSyntaxParser"
   "-rpath" "${xcode_toolchain}/lib/swift/macosx")
 set(SwiftSyntaxExample_args SwiftSyntaxExample
-    SOURCES ${SwiftSyntaxExample_sources}
-    SWIFT_MODULE_DEPENDS SwiftSyntax
-    LINKER_OPTIONS ${SwiftSyntaxExample_linker_options})
+  SOURCES ${SwiftSyntaxExample_sources}
+  SWIFT_MODULE_DEPENDS SwiftSyntax
+  LINKER_OPTIONS ${SwiftSyntaxExample_linker_options})
 
 set(RxSwiftExample_sources RxSwiftExample.swift)
 set(RxSwiftExample_linker_options ${benchmark_linker_options})
 set(RxSwiftExample_args RxSwiftExample
-    SOURCES ${RxSwiftExample_sources}
-    SWIFT_MODULE_DEPENDS RxSwift
-    LINKER_OPTIONS ${RxSwiftExample_linker_options})
+  SOURCES ${RxSwiftExample_sources}
+  SWIFT_MODULE_DEPENDS RxSwift
+  LINKER_OPTIONS ${RxSwiftExample_linker_options})
+
+
+set(SwiftNumericsExample_sources SwiftNumericsExample.swift)
+set(SwiftNumericsExample_linker_options
+  ${benchmark_linker_options}
+  "-rpath" "/Users/kateinoigakukun/projects/swift-source-2/build/Ninja-ReleaseAssert/swift-macosx-x86_64/./lib/swift/macosx/x86_64")
+set(SwiftNumericsExample_args SwiftNumericsExample
+  SOURCES ${SwiftNumericsExample_sources}
+  SWIFT_MODULE_DEPENDS ComplexModule RealModule
+  LINKER_OPTIONS ${SwiftNumericsExample_linker_options})
+
 
 set(SwiftStdlibExample_sources SwiftStdlibExample.swift)
 set(SwiftStdlibExample_linker_options
@@ -139,19 +150,23 @@ if(SWIFT_LTO AND LLVM_LTO)
   add_swift_llvm_lto_executable(${SwiftSyntaxExample_args})
   add_swift_llvm_lto_executable(${RxSwiftExample_args})
   add_swift_llvm_lto_executable(${SwiftStdlibExample_args})
+  add_swift_llvm_lto_executable(${SwiftNumericsExample_args})
 elseif(SWIFT_LTO)
   add_swift_lto_executable(${SwiftyJSONExample_args})
   add_swift_lto_executable(${SwiftSyntaxExample_args})
   add_swift_lto_executable(${RxSwiftExample_args})
   add_swift_lto_executable(${SwiftStdlibExample_args})
+  add_swift_lto_executable(${SwiftNumericsExample_args})
 elseif(LLVM_LTO)
   add_llvm_lto_executable(${SwiftyJSONExample_args})
   add_llvm_lto_executable(${SwiftSyntaxExample_args})
   add_llvm_lto_executable(${RxSwiftExample_args})
   add_llvm_lto_executable(${SwiftStdlibExample_args})
+  add_llvm_lto_executable(${SwiftNumericsExample_args})
 else()
   add_swift_executable(${SwiftyJSONExample_args})
   add_swift_executable(${SwiftSyntaxExample_args})
   add_swift_executable(${RxSwiftExample_args})
   add_swift_executable(${SwiftStdlibExample_args})
+  add_swift_executable(${SwiftNumericsExample_args})
 endif()

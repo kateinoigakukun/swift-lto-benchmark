@@ -41,6 +41,7 @@ function(_emit_swiftmodule name)
     DEPENDS ${ESM_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-module"
+        "-target" "x86_64-apple-macosx10.9"
         "-module-name" "${name}"
         "-sdk" "$ENV{SDKROOT}"
         "-emit-module-path" "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule"
@@ -164,7 +165,7 @@ function(add_swift_executable name)
     SWIFT_MODULE_DEPENDS ${ASE_SWIFT_MODULE_DEPENDS}
     COMPILE_OPTIONS ${compile_options})
 
-  set(driver_options)
+  set(driver_options "-toolchain-stdlib-rpath")
   foreach(option ${ASE_LINKER_OPTIONS})
     list(APPEND driver_options "-Xlinker" "${option}")
   endforeach()

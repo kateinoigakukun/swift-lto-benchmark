@@ -17,7 +17,7 @@ func buildTime(target: Target, variant: Variant) throws -> UInt64 {
     .appendingPathComponent(".ninja_log")
   let ninjaLogContent = try String(contentsOf: ninjaLogURL)
   let log = try parseNinjaLog(ninjaLogContent)
-  let targets = log.targets.filter { $0.name.contains(target.rawValue) }
+  let targets = log.targets.filter { target.isRelated(to: $0.name) }
   let start = targets.lazy.map(\.start).min()!
   let end = targets.lazy.map(\.end).max()!
   return end - start

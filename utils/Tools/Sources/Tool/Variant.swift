@@ -28,7 +28,22 @@ typealias Variant = (lto: LTOVariant, opt: OptVariant)
 
 
 enum Target: String, CaseIterable {
+  case SwiftStdlib
   case SwiftyJSON
   case SwiftSyntax
+  case SwiftNumerics
   case RxSwift
+
+  func isRelated(to ninjaTarget: String) -> Bool {
+    switch self {
+    case .SwiftyJSON, .SwiftSyntax, .RxSwift:
+      return ninjaTarget.contains(self.rawValue)
+    case .SwiftStdlib:
+      return ninjaTarget.hasPrefix("Swift.") ||
+        ninjaTarget.contains(self.rawValue)
+    case .SwiftNumerics:
+      return ninjaTarget.hasPrefix("ComplexModule.") ||
+        ninjaTarget.contains(self.rawValue)
+    }
+  }
 }

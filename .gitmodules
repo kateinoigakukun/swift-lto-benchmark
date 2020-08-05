@@ -10,3 +10,6 @@
 [submodule "Example/third-party/swift"]
 	path = Example/third-party/swift
 	url = file:///Users/kateinoigakukun/projects/swift-source-2/swift
+[submodule "Example/third-party/swift-numerics"]
+	path = Example/third-party/swift-numerics
+	url = https://github.com/apple/swift-numerics.git

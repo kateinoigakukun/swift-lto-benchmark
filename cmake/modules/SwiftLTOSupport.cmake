@@ -37,6 +37,7 @@ function(_emit_swift_lto_intermediate_files name)
     DEPENDS ${ESLIF_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-sib"
+        "-target" "x86_64-apple-macosx10.9"
         "-module-name" "${name}"
         "-sdk" "$ENV{SDKROOT}"
         "-emit-module-summary-path"
@@ -174,6 +175,7 @@ function(_lower_and_optimize_sib_to_object target)
     DEPENDS ${LOSO_MERGED_SUMMARY} ${lto_target}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-c" "${sib_path}"
+        "-target" "x86_64-apple-macosx10.9"
         "-sdk" "$ENV{SDKROOT}"
         "-module-summary-path"
         "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
@@ -242,7 +244,7 @@ function(add_swift_lto_executable name)
   list(APPEND dependency_targets "${name}.o")
   list(APPEND absolute_link_objects "${CMAKE_CURRENT_BINARY_DIR}/${name}.o")
 
-  set(driver_options)
+  set(driver_options "-toolchain-stdlib-rpath")
   foreach(option ${ASLE_LINKER_OPTIONS})
     list(APPEND driver_options "-Xlinker" "${option}")
   endforeach()
@@ -251,6 +253,7 @@ function(add_swift_lto_executable name)
     DEPENDS ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}"
+        "-target" "x86_64-apple-macosx10.9"
         ${absolute_link_objects}
         ${driver_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
@@ -390,7 +393,7 @@ function(add_llvm_lto_executable name)
         -L ${toolchain}/lib/swift/macosx
         -L ${xcode_toolchain}/lib/swift
         -L ${xcode_toolchain}/lib/swift-5.0/macosx/
-        -platform_version macos 10.15.0 11.0.0
+        -rpath ${toolchain}/lib/swift/macosx
         -no_objc_category_merging
         ${ASLE_LINKER_OPTIONS}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
@@ -475,7 +478,6 @@ function(add_swift_llvm_lto_executable name)
         -L ${toolchain}/lib/swift/macosx
         -L ${xcode_toolchain}/lib/swift
         -L ${xcode_toolchain}/lib/swift-5.0/macosx/
-        -platform_version macos 10.15.0 11.0.0
         -no_objc_category_merging
         ${ASLE_LINKER_OPTIONS}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"

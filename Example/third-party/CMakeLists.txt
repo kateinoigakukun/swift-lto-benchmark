@@ -58,6 +58,37 @@ else()
 endif()
 
 
+# ComplexModule from swift-numerics
+add_library(_NumericsShims swift-numerics/Sources/_NumericsShims/_NumericsShims.c)
+target_include_directories(_NumericsShims PUBLIC swift-numerics/Sources/_NumericsShims/include)
+
+file(GLOB_RECURSE RealModule_sources "swift-numerics/Sources/RealModule/*.swift")
+file(GLOB_RECURSE ComplexModule_sources "swift-numerics/Sources/ComplexModule/*.swift")
+
+if(SWIFT_LTO)
+  add_swift_lto_library(RealModule
+    SOURCES ${RealModule_sources}
+    SWIFT_MODULE_DEPENDS _NumericsShims)
+  add_swift_lto_library(ComplexModule
+    SOURCES ${ComplexModule_sources}
+    SWIFT_MODULE_DEPENDS RealModule _NumericsShims)
+elseif(LLVM_LTO)
+  add_swift_llvm_lto_library(RealModule
+    SOURCES ${RealModule_sources}
+    SWIFT_MODULE_DEPENDS _NumericsShims)
+  add_swift_llvm_lto_library(ComplexModule
+    SOURCES ${ComplexModule_sources}
+    SWIFT_MODULE_DEPENDS RealModule _NumericsShims)
+else()
+  add_swift_library(RealModule
+    SOURCES ${RealModule_sources}
+    SWIFT_MODULE_DEPENDS _NumericsShims)
+  add_swift_library(ComplexModule
+    SOURCES ${ComplexModule_sources}
+    SWIFT_MODULE_DEPENDS RealModule _NumericsShims)
+endif()
+
+
 # stdlib
 set(Swift_sources swift-stdlib.filelist)
 set(Swift_compile_options
