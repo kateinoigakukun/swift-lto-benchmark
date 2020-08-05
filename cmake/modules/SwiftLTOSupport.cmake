@@ -17,7 +17,7 @@ function(_emit_swift_lto_intermediate_files name)
     "${name}.swiftmodule.summary")
 
   set(absolute_source_files)
-  translate_to_absolute_paths(absolute_source_files ${ESLIF_SOURCES})
+  translate_to_absolute_paths(absolute_source_files "${ESLIF_SOURCES}")
 
   set(dependency_targets)
 
@@ -91,10 +91,11 @@ function(add_swift_lto_library name)
     ASLL # prefix
     "" # options
     "" # single-value args
-    "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
+    "SOURCES;SWIFT_MODULE_DEPENDS;COMPILE_OPTIONS" # multi-value args
     ${ARGN})
 
   set(compile_options
+    ${ASLL_COMPILE_OPTIONS}
     "-parse-as-library"
     $<$<CONFIG:MinSizeRel>:"-Osize">
     $<$<CONFIG:Release>:"-O">)
@@ -270,7 +271,7 @@ function(_emit_swift_llvm_bc name)
   set(compile_options "${ESLB_COMPILE_OPTIONS}")
 
   set(absolute_source_files)
-  translate_to_absolute_paths(absolute_source_files ${ESLB_SOURCES})
+  translate_to_absolute_paths(absolute_source_files "${ESLB_SOURCES}")
 
   set(dependency_targets)
 
@@ -306,10 +307,11 @@ function(add_swift_llvm_lto_library name)
     ASLL # prefix
     "" # options
     "" # single-value args
-    "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
+    "SOURCES;SWIFT_MODULE_DEPENDS;COMPILE_OPTIONS" # multi-value args
     ${ARGN})
 
   set(compile_options
+    ${ASLL_COMPILE_OPTIONS}
     "-parse-as-library"
     $<$<CONFIG:MinSizeRel>:"-Osize">
     $<$<CONFIG:Release>:"-O">)

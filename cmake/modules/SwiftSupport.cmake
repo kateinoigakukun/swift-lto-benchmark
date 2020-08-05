@@ -1,13 +1,15 @@
-function translate_to_absolute_paths(result_var sources)
+macro(translate_to_absolute_paths result_var sources)
   foreach(file ${sources})
     get_filename_component(file_path ${file} PATH)
     if(IS_ABSOLUTE "${file_path}")
       list(APPEND ${result_var} "${file}")
+    elseif("${file}" MATCHES "\.filelist$")
+      list(APPEND ${result_var} "@${CMAKE_CURRENT_SOURCE_DIR}/${file}")
     else()
       list(APPEND ${result_var} "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
     endif()
   endforeach()
-endfunction()
+endmacro()
 
 function(_emit_swiftmodule name)
   cmake_parse_arguments(
@@ -19,7 +21,8 @@ function(_emit_swiftmodule name)
   set(compile_options "${ESM_COMPILE_OPTIONS}")
 
   set(absolute_source_files)
-  translate_to_absolute_paths(absolute_source_files ${ESM_SOURCES})
+  translate_to_absolute_paths(absolute_source_files "${ESM_SOURCES}")
+  message("${absolute_source_files}")
 
   set(dependency_targets)
 
@@ -55,7 +58,7 @@ function(_emit_swift_object name)
   set(compile_options "${ESO_COMPILE_OPTIONS}")
 
   set(absolute_source_files)
-  translate_to_absolute_paths(absolute_source_files ${ESO_SOURCES})
+  translate_to_absolute_paths(absolute_source_files "${ESO_SOURCES}")
 
   set(dependency_targets)
 
@@ -93,10 +96,11 @@ function(add_swift_library name)
     ASL # prefix
     "" # options
     "" # single-value args
-    "SOURCES;SWIFT_MODULE_DEPENDS" # multi-value args
+    "SOURCES;SWIFT_MODULE_DEPENDS;COMPILE_OPTIONS" # multi-value args
     ${ARGN})
 
   set(compile_options
+    ${ASL_COMPILE_OPTIONS}
     "-parse-as-library"
     $<$<CONFIG:MinSizeRel>:"-Osize">
     $<$<CONFIG:Release>:"-O">)
