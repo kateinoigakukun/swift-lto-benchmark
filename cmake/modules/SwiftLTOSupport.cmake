@@ -40,6 +40,7 @@ function(_emit_swift_lto_intermediate_files name)
         "-target" "x86_64-apple-macosx10.9"
         "-module-name" "${name}"
         "-sdk" "$ENV{SDKROOT}"
+        "-Xllvm" "-module-summary-embed-debug-name"
         "-emit-module-summary-path"
         "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule.summary"
         ${absolute_source_files} ${compile_options}
@@ -153,6 +154,7 @@ function(_merge_swift_module_summaries name)
     DEPENDS "${name}_LTO" ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-cross-module-opt"
+        "-module-summary-embed-debug-name"
         ${module_summary_files}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule.merged-summary"
   )
