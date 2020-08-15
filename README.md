@@ -8,6 +8,7 @@ $ ./utils/build-script path/to/swiftc
 
 
 ## Result
+
 ### SwiftStdlib
 <table>
 <tr>
@@ -23,23 +24,23 @@ $ ./utils/build-script path/to/swiftc
 <tr>
     <td>Onone</td>
     <td>10.0 MB</td>
-    <td>6.6 MB</td>
+    <td>6.3 MB</td>
     <td>6.8 MB</td>
-    <td>4.8 MB</td>
+    <td>4.6 MB</td>
 </tr>
 <tr>
     <td>O</td>
-    <td>7.5 MB</td>
-    <td>4.7 MB</td>
     <td>7.4 MB</td>
-    <td>4.3 MB</td>
+    <td>4.5 MB</td>
+    <td>7.4 MB</td>
+    <td>4.1 MB</td>
 </tr>
 <tr>
     <td>Osize</td>
     <td>7.0 MB</td>
-    <td>4.5 MB</td>
+    <td>4.4 MB</td>
     <td>6.8 MB</td>
-    <td>4.1 MB</td>
+    <td>3.9 MB</td>
 </tr>
 </table>
 
@@ -56,24 +57,24 @@ $ ./utils/build-script path/to/swiftc
 </tr>
     <tr>
     <td>Onone</td>
-    <td>185.73 s</td>
-    <td>178.56 s</td>
-    <td>181.19 s</td>
-    <td>216.63 s</td>
+    <td>34.69 s</td>
+    <td>28.80 s</td>
+    <td>90.36 s</td>
+    <td>60.34 s</td>
 </tr>
     <tr>
     <td>O</td>
-    <td>615.91 s</td>
-    <td>560.77 s</td>
-    <td>316.85 s</td>
-    <td>569.25 s</td>
+    <td>232.39 s</td>
+    <td>179.90 s</td>
+    <td>60.02 s</td>
+    <td>186.14 s</td>
 </tr>
     <tr>
     <td>Osize</td>
-    <td>478.26 s</td>
-    <td>420.65 s</td>
-    <td>172.32 s</td>
-    <td>359.00 s</td>
+    <td>173.40 s</td>
+    <td>129.79 s</td>
+    <td>39.26 s</td>
+    <td>113.32 s</td>
 </tr>
 </table>
 
@@ -130,39 +131,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>1624.3</td>
-    <td>1716.4</td>
-    <td>1648.0</td>
-    <td>16.0</td>
-    <td>1644.7</td>
-    <td>2490368</td>
+  <td>1544.9</td>
+    <td>1696.8</td>
+    <td>1571.0</td>
+    <td>22.0</td>
+    <td>1564.6</td>
+    <td>2600960</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>1606.4</td>
-    <td>1698.6</td>
-    <td>1627.0</td>
+  <td>1526.9</td>
+    <td>1608.5</td>
+    <td>1552.0</td>
     <td>14.0</td>
-    <td>1623.2</td>
-    <td>2936832</td>
+    <td>1550.3</td>
+    <td>2924544</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>1602.2</td>
-    <td>1686.7</td>
-    <td>1624.0</td>
-    <td>14.0</td>
-    <td>1623.4</td>
-    <td>2744320</td>
+  <td>1501.7</td>
+    <td>1606.0</td>
+    <td>1531.0</td>
+    <td>18.0</td>
+    <td>1527.8</td>
+    <td>2277376</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>1586.5</td>
-    <td>1645.3</td>
-    <td>1606.0</td>
-    <td>11.0</td>
-    <td>1605.0</td>
-    <td>2260992</td>
+  <td>1491.9</td>
+    <td>1621.6</td>
+    <td>1515.0</td>
+    <td>17.0</td>
+    <td>1512.2</td>
+    <td>2392064</td>
 </tr>
 </table>
 
@@ -174,42 +175,41 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>1766.1</td>
-    <td>1840.8</td>
-    <td>1785.0</td>
-    <td>13.0</td>
-    <td>1783.1</td>
-    <td>2854912</td>
+  <td>1657.2</td>
+    <td>1735.5</td>
+    <td>1685.0</td>
+    <td>15.0</td>
+    <td>1684.2</td>
+    <td>2637824</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>1718.5</td>
-    <td>1815.4</td>
-    <td>1744.0</td>
+  <td>1655.0</td>
+    <td>1744.5</td>
+    <td>1677.0</td>
     <td>15.0</td>
-    <td>1741.9</td>
-    <td>2969600</td>
+    <td>1673.7</td>
+    <td>2592768</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>1721.9</td>
-    <td>1808.3</td>
-    <td>1746.0</td>
-    <td>17.0</td>
-    <td>1743.2</td>
-    <td>2838528</td>
+  <td>1628.5</td>
+    <td>1727.9</td>
+    <td>1656.0</td>
+    <td>15.0</td>
+    <td>1653.4</td>
+    <td>2334720</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>1693.3</td>
-    <td>1789.1</td>
-    <td>1715.0</td>
+  <td>1608.2</td>
+    <td>1678.9</td>
+    <td>1634.0</td>
     <td>13.0</td>
-    <td>1714.6</td>
-    <td>2543616</td>
+    <td>1631.0</td>
+    <td>2502656</td>
 </tr>
 </table>
-
 
 
 ### SwiftyJSON
@@ -226,24 +226,24 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
     <td>Onone</td>
-    <td>307.0 KB</td>
-    <td>273.5 KB</td>
-    <td>250.7 KB</td>
-    <td>202.8 KB</td>
+    <td>275.0 KB</td>
+    <td>261.5 KB</td>
+    <td>214.7 KB</td>
+    <td>170.8 KB</td>
 </tr>
 <tr>
     <td>O</td>
-    <td>309.9 KB</td>
-    <td>275.9 KB</td>
-    <td>299.3 KB</td>
-    <td>233.2 KB</td>
+    <td>277.8 KB</td>
+    <td>255.9 KB</td>
+    <td>263.3 KB</td>
+    <td>197.2 KB</td>
 </tr>
 <tr>
     <td>Osize</td>
-    <td>277.8 KB</td>
-    <td>243.3 KB</td>
-    <td>251.9 KB</td>
-    <td>203.0 KB</td>
+    <td>241.8 KB</td>
+    <td>231.4 KB</td>
+    <td>223.9 KB</td>
+    <td>175.0 KB</td>
 </tr>
 </table>
 
@@ -260,24 +260,24 @@ $ ./utils/build-script path/to/swiftc
 </tr>
     <tr>
     <td>Onone</td>
-    <td>16.54 s</td>
-    <td>19.05 s</td>
-    <td>22.31 s</td>
-    <td>22.80 s</td>
+    <td>16.76 s</td>
+    <td>20.80 s</td>
+    <td>22.98 s</td>
+    <td>22.71 s</td>
 </tr>
     <tr>
     <td>O</td>
-    <td>38.49 s</td>
-    <td>36.15 s</td>
-    <td>42.25 s</td>
-    <td>43.76 s</td>
+    <td>33.69 s</td>
+    <td>39.77 s</td>
+    <td>37.51 s</td>
+    <td>40.10 s</td>
 </tr>
     <tr>
     <td>Osize</td>
-    <td>16.19 s</td>
-    <td>17.15 s</td>
-    <td>18.18 s</td>
-    <td>16.71 s</td>
+    <td>14.43 s</td>
+    <td>15.35 s</td>
+    <td>16.10 s</td>
+    <td>15.25 s</td>
 </tr>
 </table>
 
@@ -290,39 +290,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>52.1</td>
-    <td>61.9</td>
-    <td>56.0</td>
+  <td>50.2</td>
+    <td>61.3</td>
+    <td>52.0</td>
     <td>2.0</td>
-    <td>55.4</td>
-    <td>4022272</td>
+    <td>52.2</td>
+    <td>3993600</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>63.2</td>
-    <td>95.2</td>
-    <td>67.0</td>
-    <td>4.0</td>
-    <td>66.1</td>
-    <td>4952064</td>
+  <td>61.7</td>
+    <td>89.3</td>
+    <td>65.0</td>
+    <td>3.0</td>
+    <td>64.4</td>
+    <td>4775936</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>63.5</td>
-    <td>77.8</td>
-    <td>67.0</td>
+  <td>60.1</td>
+    <td>70.0</td>
+    <td>64.0</td>
     <td>2.0</td>
-    <td>66.5</td>
-    <td>7880704</td>
+    <td>63.2</td>
+    <td>7602176</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>63.6</td>
-    <td>84.2</td>
-    <td>68.0</td>
-    <td>3.0</td>
-    <td>67.7</td>
-    <td>8007680</td>
+  <td>60.2</td>
+    <td>73.2</td>
+    <td>64.0</td>
+    <td>2.0</td>
+    <td>63.4</td>
+    <td>7737344</td>
 </tr>
 </table>
 
@@ -334,39 +334,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>34.9</td>
-    <td>45.6</td>
-    <td>38.0</td>
-    <td>2.0</td>
-    <td>37.5</td>
-    <td>4087808</td>
+  <td>34.3</td>
+    <td>40.9</td>
+    <td>36.0</td>
+    <td>1.0</td>
+    <td>35.7</td>
+    <td>4046848</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>42.4</td>
-    <td>54.1</td>
-    <td>46.0</td>
+  <td>41.2</td>
+    <td>51.9</td>
+    <td>43.0</td>
     <td>2.0</td>
-    <td>45.4</td>
-    <td>4902912</td>
+    <td>42.9</td>
+    <td>4759552</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>44.7</td>
-    <td>55.5</td>
-    <td>49.0</td>
+  <td>43.3</td>
+    <td>50.5</td>
+    <td>46.0</td>
     <td>2.0</td>
-    <td>48.2</td>
-    <td>7860224</td>
+    <td>45.8</td>
+    <td>7798784</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>44.5</td>
-    <td>53.4</td>
-    <td>48.0</td>
-    <td>2.0</td>
-    <td>47.5</td>
-    <td>7884800</td>
+  <td>43.7</td>
+    <td>51.1</td>
+    <td>46.0</td>
+    <td>1.0</td>
+    <td>45.9</td>
+    <td>7475200</td>
 </tr>
 </table>
 
@@ -378,39 +378,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>37.6</td>
-    <td>47.0</td>
-    <td>41.0</td>
+  <td>35.9</td>
+    <td>42.9</td>
+    <td>38.0</td>
     <td>1.0</td>
-    <td>40.4</td>
-    <td>4014080</td>
+    <td>37.8</td>
+    <td>4001792</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>43.3</td>
-    <td>58.6</td>
-    <td>47.0</td>
+  <td>41.7</td>
+    <td>52.1</td>
+    <td>44.0</td>
     <td>2.0</td>
-    <td>46.8</td>
-    <td>4857856</td>
+    <td>43.4</td>
+    <td>4866048</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>49.0</td>
-    <td>59.8</td>
-    <td>52.0</td>
+  <td>46.7</td>
+    <td>57.8</td>
+    <td>49.0</td>
     <td>2.0</td>
-    <td>52.0</td>
-    <td>7901184</td>
+    <td>49.2</td>
+    <td>7868416</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>49.3</td>
-    <td>59.8</td>
-    <td>53.0</td>
+  <td>47.4</td>
+    <td>56.6</td>
+    <td>50.0</td>
     <td>2.0</td>
-    <td>52.5</td>
-    <td>7794688</td>
+    <td>50.0</td>
+    <td>7651328</td>
 </tr>
 </table>
 
@@ -436,17 +436,17 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
     <td>O</td>
-    <td>6.9 MB</td>
+    <td>6.8 MB</td>
     <td>5.4 MB</td>
     <td>6.9 MB</td>
-    <td>4.5 MB</td>
+    <td>4.4 MB</td>
 </tr>
 <tr>
     <td>Osize</td>
     <td>5.6 MB</td>
-    <td>4.5 MB</td>
+    <td>4.4 MB</td>
     <td>5.3 MB</td>
-    <td>3.5 MB</td>
+    <td>3.3 MB</td>
 </tr>
 </table>
 
@@ -463,24 +463,24 @@ $ ./utils/build-script path/to/swiftc
 </tr>
     <tr>
     <td>Onone</td>
-    <td>223.35 s</td>
-    <td>194.52 s</td>
-    <td>340.84 s</td>
-    <td>275.10 s</td>
+    <td>199.00 s</td>
+    <td>178.24 s</td>
+    <td>307.41 s</td>
+    <td>247.95 s</td>
 </tr>
     <tr>
     <td>O</td>
-    <td>723.84 s</td>
-    <td>666.75 s</td>
-    <td>732.82 s</td>
-    <td>678.54 s</td>
+    <td>656.39 s</td>
+    <td>605.61 s</td>
+    <td>661.79 s</td>
+    <td>608.35 s</td>
 </tr>
     <tr>
     <td>Osize</td>
-    <td>525.09 s</td>
-    <td>469.49 s</td>
-    <td>476.35 s</td>
-    <td>398.39 s</td>
+    <td>473.17 s</td>
+    <td>424.89 s</td>
+    <td>431.92 s</td>
+    <td>361.39 s</td>
 </tr>
 </table>
 
@@ -493,39 +493,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>467.3</td>
-    <td>520.9</td>
-    <td>484.0</td>
-    <td>10.0</td>
-    <td>481.1</td>
-    <td>2105344</td>
+  <td>448.3</td>
+    <td>519.6</td>
+    <td>461.0</td>
+    <td>13.0</td>
+    <td>456.2</td>
+    <td>2076672</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>427.1</td>
-    <td>479.7</td>
-    <td>438.0</td>
-    <td>10.0</td>
-    <td>435.6</td>
-    <td>3219456</td>
+  <td>408.5</td>
+    <td>444.6</td>
+    <td>416.0</td>
+    <td>6.0</td>
+    <td>415.1</td>
+    <td>3117056</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>346.7</td>
-    <td>392.3</td>
-    <td>358.0</td>
-    <td>8.0</td>
-    <td>357.1</td>
-    <td>1523712</td>
+  <td>328.8</td>
+    <td>363.5</td>
+    <td>338.0</td>
+    <td>6.0</td>
+    <td>336.3</td>
+    <td>1605632</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>341.5</td>
-    <td>384.3</td>
-    <td>354.0</td>
-    <td>10.0</td>
-    <td>350.6</td>
-    <td>1544192</td>
+  <td>326.6</td>
+    <td>350.8</td>
+    <td>336.0</td>
+    <td>6.0</td>
+    <td>335.2</td>
+    <td>1830912</td>
 </tr>
 </table>
 
@@ -537,39 +537,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>65.9</td>
-    <td>76.3</td>
-    <td>70.0</td>
+  <td>64.4</td>
+    <td>75.2</td>
+    <td>68.0</td>
     <td>2.0</td>
-    <td>69.4</td>
-    <td>1179648</td>
+    <td>67.4</td>
+    <td>995328</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>74.5</td>
-    <td>83.0</td>
-    <td>77.0</td>
+  <td>71.2</td>
+    <td>82.7</td>
+    <td>75.0</td>
     <td>2.0</td>
-    <td>76.9</td>
-    <td>1425408</td>
+    <td>75.0</td>
+    <td>1556480</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>66.2</td>
-    <td>76.1</td>
-    <td>70.0</td>
+  <td>63.4</td>
+    <td>73.7</td>
+    <td>66.0</td>
     <td>2.0</td>
-    <td>69.7</td>
-    <td>1081344</td>
+    <td>65.8</td>
+    <td>1150976</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>66.1</td>
-    <td>74.5</td>
-    <td>69.0</td>
+  <td>63.2</td>
+    <td>72.9</td>
+    <td>66.0</td>
     <td>2.0</td>
-    <td>68.7</td>
-    <td>1032192</td>
+    <td>65.4</td>
+    <td>1052672</td>
 </tr>
 </table>
 
@@ -581,39 +581,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>67.8</td>
-    <td>81.5</td>
-    <td>72.0</td>
-    <td>3.0</td>
-    <td>71.1</td>
-    <td>1142784</td>
+  <td>64.5</td>
+    <td>74.3</td>
+    <td>67.0</td>
+    <td>2.0</td>
+    <td>67.3</td>
+    <td>1175552</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>75.1</td>
-    <td>97.4</td>
-    <td>80.0</td>
-    <td>4.0</td>
-    <td>79.6</td>
-    <td>1830912</td>
+  <td>73.9</td>
+    <td>85.5</td>
+    <td>77.0</td>
+    <td>2.0</td>
+    <td>76.7</td>
+    <td>1622016</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>66.7</td>
-    <td>79.4</td>
-    <td>70.0</td>
-    <td>3.0</td>
-    <td>69.3</td>
-    <td>1126400</td>
+  <td>63.9</td>
+    <td>75.0</td>
+    <td>67.0</td>
+    <td>2.0</td>
+    <td>66.7</td>
+    <td>995328</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>66.5</td>
-    <td>79.8</td>
-    <td>70.0</td>
+  <td>63.9</td>
+    <td>77.7</td>
+    <td>67.0</td>
     <td>3.0</td>
-    <td>69.6</td>
-    <td>1089536</td>
+    <td>66.7</td>
+    <td>1122304</td>
 </tr>
 </table>
 
@@ -632,24 +632,24 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
     <td>Onone</td>
-    <td>291.9 KB</td>
-    <td>173.8 KB</td>
-    <td>239.9 KB</td>
-    <td>114.3 KB</td>
+    <td>259.9 KB</td>
+    <td>165.9 KB</td>
+    <td>203.9 KB</td>
+    <td>90.3 KB</td>
 </tr>
 <tr>
     <td>O</td>
-    <td>204.2 KB</td>
-    <td>138.7 KB</td>
-    <td>201.9 KB</td>
-    <td>110.9 KB</td>
+    <td>168.2 KB</td>
+    <td>130.7 KB</td>
+    <td>169.9 KB</td>
+    <td>74.8 KB</td>
 </tr>
 <tr>
     <td>Osize</td>
-    <td>188.5 KB</td>
-    <td>138.7 KB</td>
-    <td>186.7 KB</td>
-    <td>111.1 KB</td>
+    <td>164.5 KB</td>
+    <td>130.7 KB</td>
+    <td>162.7 KB</td>
+    <td>75.1 KB</td>
 </tr>
 </table>
 
@@ -666,24 +666,24 @@ $ ./utils/build-script path/to/swiftc
 </tr>
     <tr>
     <td>Onone</td>
-    <td>4.02 s</td>
-    <td>3.50 s</td>
-    <td>6.70 s</td>
-    <td>4.64 s</td>
+    <td>2.09 s</td>
+    <td>1.89 s</td>
+    <td>5.75 s</td>
+    <td>3.42 s</td>
 </tr>
     <tr>
     <td>O</td>
-    <td>5.32 s</td>
-    <td>4.39 s</td>
+    <td>5.04 s</td>
     <td>4.60 s</td>
-    <td>5.34 s</td>
+    <td>4.69 s</td>
+    <td>4.62 s</td>
 </tr>
     <tr>
     <td>Osize</td>
-    <td>3.12 s</td>
-    <td>2.47 s</td>
-    <td>2.52 s</td>
-    <td>2.50 s</td>
+    <td>2.26 s</td>
+    <td>2.09 s</td>
+    <td>2.26 s</td>
+    <td>2.40 s</td>
 </tr>
 </table>
 
@@ -706,7 +706,7 @@ $ ./utils/build-script path/to/swiftc
 <tr>
   <td>Swift LTO</td>
   <td>0.1</td>
-    <td>0.8</td>
+    <td>1.1</td>
     <td>0.0</td>
     <td>0.0</td>
     <td>0.1</td>
@@ -798,7 +798,7 @@ $ ./utils/build-script path/to/swiftc
     <td>0.0</td>
     <td>0.0</td>
     <td>0.0</td>
-    <td>274432</td>
+    <td>270336</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
@@ -837,22 +837,22 @@ $ ./utils/build-script path/to/swiftc
     <td>Onone</td>
     <td>2.7 MB</td>
     <td>1.9 MB</td>
-    <td>1.8 MB</td>
+    <td>1.7 MB</td>
     <td>1.4 MB</td>
 </tr>
 <tr>
     <td>O</td>
     <td>1.6 MB</td>
     <td>1.4 MB</td>
-    <td>1.6 MB</td>
+    <td>1.5 MB</td>
     <td>1.3 MB</td>
 </tr>
 <tr>
     <td>Osize</td>
-    <td>1.5 MB</td>
+    <td>1.4 MB</td>
     <td>1.3 MB</td>
     <td>1.4 MB</td>
-    <td>1.2 MB</td>
+    <td>1.1 MB</td>
 </tr>
 </table>
 
@@ -869,24 +869,24 @@ $ ./utils/build-script path/to/swiftc
 </tr>
     <tr>
     <td>Onone</td>
-    <td>55.99 s</td>
-    <td>56.17 s</td>
-    <td>79.44 s</td>
-    <td>74.57 s</td>
+    <td>50.84 s</td>
+    <td>54.44 s</td>
+    <td>71.73 s</td>
+    <td>69.62 s</td>
 </tr>
     <tr>
     <td>O</td>
-    <td>110.06 s</td>
-    <td>103.47 s</td>
-    <td>117.51 s</td>
-    <td>110.89 s</td>
+    <td>99.82 s</td>
+    <td>99.30 s</td>
+    <td>106.89 s</td>
+    <td>103.21 s</td>
 </tr>
     <tr>
     <td>Osize</td>
-    <td>67.49 s</td>
-    <td>60.75 s</td>
-    <td>64.15 s</td>
-    <td>56.89 s</td>
+    <td>60.65 s</td>
+    <td>55.21 s</td>
+    <td>56.99 s</td>
+    <td>51.42 s</td>
 </tr>
 </table>
 
@@ -899,39 +899,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>75.4</td>
-    <td>89.9</td>
-    <td>80.0</td>
-    <td>2.0</td>
-    <td>79.4</td>
-    <td>688128</td>
+  <td>74.0</td>
+    <td>92.6</td>
+    <td>78.0</td>
+    <td>4.0</td>
+    <td>76.7</td>
+    <td>667648</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>69.5</td>
-    <td>84.3</td>
-    <td>74.0</td>
+  <td>65.9</td>
+    <td>78.7</td>
+    <td>69.0</td>
     <td>2.0</td>
-    <td>73.6</td>
-    <td>1294336</td>
+    <td>69.1</td>
+    <td>1302528</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>74.6</td>
-    <td>91.8</td>
-    <td>79.0</td>
-    <td>3.0</td>
-    <td>77.6</td>
+  <td>71.0</td>
+    <td>79.9</td>
+    <td>75.0</td>
+    <td>2.0</td>
+    <td>74.2</td>
     <td>417792</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>74.0</td>
-    <td>85.2</td>
-    <td>78.0</td>
+  <td>70.8</td>
+    <td>80.7</td>
+    <td>73.0</td>
     <td>2.0</td>
-    <td>78.0</td>
-    <td>405504</td>
+    <td>73.1</td>
+    <td>368640</td>
 </tr>
 </table>
 
@@ -943,39 +943,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>37.5</td>
-    <td>48.8</td>
-    <td>40.0</td>
-    <td>1.0</td>
-    <td>40.1</td>
+  <td>36.3</td>
+    <td>45.5</td>
+    <td>38.0</td>
+    <td>2.0</td>
+    <td>38.1</td>
     <td>577536</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>38.4</td>
-    <td>54.1</td>
-    <td>41.0</td>
-    <td>2.0</td>
-    <td>40.4</td>
-    <td>1216512</td>
+  <td>37.2</td>
+    <td>47.4</td>
+    <td>39.0</td>
+    <td>1.0</td>
+    <td>38.4</td>
+    <td>1163264</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>41.3</td>
-    <td>50.2</td>
-    <td>44.0</td>
+  <td>40.0</td>
+    <td>48.1</td>
+    <td>42.0</td>
     <td>1.0</td>
-    <td>44.1</td>
-    <td>446464</td>
+    <td>41.7</td>
+    <td>438272</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>40.6</td>
-    <td>50.6</td>
-    <td>44.0</td>
+  <td>39.2</td>
+    <td>48.5</td>
+    <td>42.0</td>
     <td>2.0</td>
-    <td>43.6</td>
-    <td>491520</td>
+    <td>41.1</td>
+    <td>430080</td>
 </tr>
 </table>
 
@@ -987,39 +987,39 @@ $ ./utils/build-script path/to/swiftc
 </tr>
 <tr>
   <td>non-LTO</td>
-  <td>37.8</td>
-    <td>47.7</td>
-    <td>40.0</td>
-    <td>1.0</td>
-    <td>39.9</td>
-    <td>561152</td>
+  <td>37.2</td>
+    <td>47.8</td>
+    <td>39.0</td>
+    <td>2.0</td>
+    <td>39.1</td>
+    <td>524288</td>
 </tr>
 <tr>
   <td>Swift LTO</td>
-  <td>37.7</td>
-    <td>49.9</td>
-    <td>40.0</td>
+  <td>37.3</td>
+    <td>49.3</td>
+    <td>39.0</td>
     <td>2.0</td>
-    <td>40.3</td>
-    <td>1241088</td>
+    <td>39.0</td>
+    <td>1216512</td>
 </tr>
 <tr>
   <td>LLVM LTO</td>
-  <td>41.7</td>
-    <td>52.0</td>
-    <td>45.0</td>
+  <td>40.4</td>
+    <td>48.0</td>
+    <td>43.0</td>
     <td>2.0</td>
-    <td>44.8</td>
-    <td>581632</td>
+    <td>42.2</td>
+    <td>548864</td>
 </tr>
 <tr>
   <td>Swift & LLVM LTO</td>
-  <td>41.8</td>
-    <td>52.1</td>
-    <td>44.0</td>
+  <td>40.5</td>
+    <td>53.3</td>
+    <td>43.0</td>
     <td>2.0</td>
-    <td>44.0</td>
-    <td>475136</td>
+    <td>42.1</td>
+    <td>454656</td>
 </tr>
 </table>
 

@@ -127,6 +127,7 @@ func benchmarkTable(target: Target) throws -> String {
 </tr>
     \(try OptVariant.allCases.map(buildTimeRow).joined(separator: "\n    "))
 </table>
+
 \(performanceBench)
 """
 }
