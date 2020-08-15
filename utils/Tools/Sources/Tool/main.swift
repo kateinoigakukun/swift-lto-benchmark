@@ -92,6 +92,19 @@ func benchmarkTable(target: Target) throws -> String {
 """
   }
 
+  let performanceBench = (getenvBool("DISABLE_PERF_BENCH") ?
+    "" :
+    """
+    #### Runtime Performance
+    \(
+      try OptVariant.allCases.map {
+        try runtimePerformanceTable(target: target, opt: $0)
+      }
+      .joined(separator: "\n\n")
+    )
+    """
+  )
+
   return """
 <table>
 <tr>
@@ -114,15 +127,12 @@ func benchmarkTable(target: Target) throws -> String {
 </tr>
     \(try OptVariant.allCases.map(buildTimeRow).joined(separator: "\n    "))
 </table>
-
-#### Runtime Performance
-\(
-  try OptVariant.allCases.map {
-    try runtimePerformanceTable(target: target, opt: $0)
-  }
-  .joined(separator: "\n\n")
-)
+\(performanceBench)
 """
+}
+
+func getenvBool(_ name: String) -> Bool {
+  getenv(name) != nil
 }
 
 if CommandLine.arguments.count >= 2 {
