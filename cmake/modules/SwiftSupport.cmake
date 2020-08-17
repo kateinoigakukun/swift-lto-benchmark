@@ -26,6 +26,16 @@ macro(host_target result_var)
   endif()
 endmacro()
 
+macro(platform_options result_var)
+  if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+    set(${result_var} "")
+  elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
+    set(${result_var} "-disable-objc-interop")
+  else()
+    message(FATAL_ERROR "Unsupported host system: ${CMAKE_SYSTEM_NAME}")
+  endif()
+endmacro()
+
 function(_emit_swiftmodule name)
   cmake_parse_arguments(
     ESM # prefix
@@ -53,6 +63,8 @@ function(_emit_swiftmodule name)
 
   set(target)
   host_target(target)
+  set(options)
+  platform_options(options)
 
   add_custom_command(
     OUTPUT ${name}.swiftmodule
@@ -61,6 +73,7 @@ function(_emit_swiftmodule name)
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-module"
         "-target" "${target}"
         "-module-name" "${name}"
+        "${options}"
         "-sdk" "$ENV{SDKROOT}"
         "-emit-module-path" "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule"
         ${absolute_source_files} ${compile_options}
@@ -96,10 +109,17 @@ function(_emit_swift_object name)
     endif()
   endforeach()
 
+  set(target)
+  host_target(target)
+  set(options)
+  platform_options(options)
+
   add_custom_target(${name}.o
     DEPENDS ${ESO_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-c"
+        "-target" "${target}"
+        "${options}"
         "-whole-module-optimization"
         "-module-name" "${name}"
         "-sdk" "$ENV{SDKROOT}"
@@ -188,10 +208,14 @@ function(add_swift_executable name)
     list(APPEND driver_options "-Xlinker" "${option}")
   endforeach()
 
+  set(target)
+  host_target(target)
+
   add_custom_target(${name}
     DEPENDS ${link_objects}
     COMMAND
       "${CMAKE_Swift_COMPILER}"
+        "-target" "${target}"
         ${absolute_link_objects}
         ${driver_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
