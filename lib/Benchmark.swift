@@ -5,7 +5,9 @@ extension UInt64 {
 }
 
 final class Timer {
+  #if canImport(Darwin)
   typealias TimeT = UInt64
+
   var info = mach_timebase_info_data_t(numer: 0, denom: 0)
 
   init() {
@@ -20,11 +22,37 @@ final class Timer {
     let elapsed = end - start
     return elapsed * UInt64(info.numer) / UInt64(info.denom)
   }
+  #else
+  typealias TimeT = timespec
+
+  func getTime() -> TimeT {
+    var ts = timespec(tv_sec: 0, tv_nsec: 0)
+    clock_gettime(CLOCK_REALTIME, &ts)
+    return ts
+  }
+
+  func diffTimeInNanoSeconds(from start: TimeT, to end: TimeT) -> UInt64 {
+    let oneSecond = 1_000_000_000 // ns
+    var elapsed = timespec(tv_sec: 0, tv_nsec: 0)
+    if end.tv_nsec - start.tv_nsec < 0 {
+      elapsed.tv_sec = end.tv_sec - start.tv_sec - 1
+      elapsed.tv_nsec = end.tv_nsec - start.tv_nsec + oneSecond
+    } else {
+      elapsed.tv_sec = end.tv_sec - start.tv_sec
+      elapsed.tv_nsec = end.tv_nsec - start.tv_nsec
+    }
+    return UInt64(elapsed.tv_sec) * UInt64(oneSecond) + UInt64(elapsed.tv_nsec)
+  }
+  #endif
 }
 
 func resourceUsage() -> rusage {
   var result = rusage()
+  #if canImport(Darwin)
   let status = getrusage(RUSAGE_SELF, &result)
+  #else
+  let status = getrusage(RUSAGE_SELF.rawValue, &result)
+  #endif
   assert(status == 0)
   return result
 }
