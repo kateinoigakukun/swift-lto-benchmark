@@ -90,16 +90,14 @@ endif()
 
 
 # stdlib
-set(Swift_sources swift-stdlib.filelist)
+configure_file(swift-stdlib.filelist.in ${CMAKE_CURRENT_BINARY_DIR}/swift-stdlib.filelist)
+set(Swift_sources ${CMAKE_CURRENT_BINARY_DIR}/swift-stdlib.filelist)
 set(Swift_compile_options
-  -sdk /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
-  -target x86_64-apple-macosx10.9
-  -resource-dir /Users/kateinoigakukun/projects/swift-source-2/build/Ninja-ReleaseAssert/swift-macosx-x86_64/./lib/swift
-  -F/Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/../../../Developer/Library/Frameworks
+  -resource-dir ${SWIFT_BUILD_DIR}/lib/swift
   -D INTERNAL_CHECKS_ENABLED
   -D SWIFT_ENABLE_RUNTIME_FUNCTION_COUNTERS
   -D SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING
-  -module-cache-path /Users/kateinoigakukun/projects/swift-source-2/build/Ninja-ReleaseAssert/swift-macosx-x86_64/./module-cache
+  -module-cache-path ${SWIFT_BUILD_DIR}/module-cache
   -enable-objc-interop
   -disable-objc-attr-requires-foundation-module
   -enable-library-evolution
@@ -107,7 +105,7 @@ set(Swift_compile_options
   -nostdimport
   -parse-stdlib
   -group-info-path
-  /Users/kateinoigakukun/projects/swift-source-2/swift/stdlib/public/core/GroupInfo.json
+  ${SWIFT_SOURCE_DIR}/stdlib/public/core/GroupInfo.json
   -swift-version 5
   -runtime-compatibility-version none
   -disable-autolinking-runtime-compatibility-dynamic-replacements
@@ -122,7 +120,7 @@ set(Swift_compile_options
   -whole-module-optimization
   -save-optimization-record=bitstream
   -parse-as-library
-  -I /Users/kateinoigakukun/projects/swift-source-2/build/Ninja-ReleaseAssert/swift-macosx-x86_64/./lib/swift/macosx)
+  -I ${SWIFT_BUILD_DIR}/lib/swift/macosx)
 set(Swift_args Swift
     SOURCES ${Swift_sources}
     COMPILE_OPTIONS ${Swift_compile_options})

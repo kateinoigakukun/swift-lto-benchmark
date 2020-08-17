@@ -60,7 +60,6 @@ set(SwiftStdlibExample_linker_options
 __TEXT
 __info_plist
 /Users/kateinoigakukun/projects/swift-source-2/build/Ninja-ReleaseAssert/swift-macosx-x86_64/stdlib/public/core/Info.plist
--application_extension
 -compatibility_version 1
 /Users/kateinoigakukun/projects/swift-source/build/Ninja-ReleaseAssert/swift-macosx-x86_64/stdlib/public/runtime/CMakeFiles/swiftRuntime-macosx-x86_64.dir/AnyHashableSupport.cpp.o
 /Users/kateinoigakukun/projects/swift-source/build/Ninja-ReleaseAssert/swift-macosx-x86_64/stdlib/public/runtime/CMakeFiles/swiftRuntime-macosx-x86_64.dir/Array.cpp.o

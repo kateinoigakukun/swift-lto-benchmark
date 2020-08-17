@@ -65,7 +65,8 @@ mkdir -p "${ROOT_PATH}/build/${VARIANT}"
 pushd "${ROOT_PATH}/build/${VARIANT}"
 cmake ../../ -GNinja $(cmake_options $VARIANT) \
      -DCMAKE_Swift_COMPILER=$SWIFTC \
-     -DCMAKE_C_COMPILER=$CLANG
+     -DCMAKE_C_COMPILER=$CLANG \
+     -DSWIFT_BUILD_DIR=$SWIFT_BUILD_DIR
 if [[ ! "${SKIP_BUILD}" ]]; then
     ninja Benchmark
     ninja examples

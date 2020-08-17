@@ -32,12 +32,15 @@ function(_emit_swift_lto_intermediate_files name)
     endif()
   endforeach()
 
+  set(target)
+  host_target(target)
+
   add_custom_command(
     OUTPUT ${lto_intermediate_files}
     DEPENDS ${ESLIF_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-sib"
-        "-target" "x86_64-apple-macosx10.9"
+        "-target" "${target}"
         "-module-name" "${name}"
         "-sdk" "$ENV{SDKROOT}"
         "-Xllvm" "-module-summary-embed-debug-name"
@@ -173,11 +176,14 @@ function(_lower_and_optimize_sib_to_object target)
   set(compile_options)
   get_target_property(compile_options "${lto_target}" SWIFT_COMPILE_OPTIONS)
 
+  set(target)
+  host_target(target)
+
   add_custom_target(${target}.o
     DEPENDS ${LOSO_MERGED_SUMMARY} ${lto_target}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-c" "${sib_path}"
-        "-target" "x86_64-apple-macosx10.9"
+        "-target" "${target}"
         "-sdk" "$ENV{SDKROOT}"
         "-module-summary-path"
         "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
@@ -251,11 +257,14 @@ function(add_swift_lto_executable name)
     list(APPEND driver_options "-Xlinker" "${option}")
   endforeach()
 
+  set(target)
+  host_target(target)
+
   add_custom_target(${name}
     DEPENDS ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}"
-        "-target" "x86_64-apple-macosx10.9"
+        "-target" "${target}"
         ${absolute_link_objects}
         ${driver_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"

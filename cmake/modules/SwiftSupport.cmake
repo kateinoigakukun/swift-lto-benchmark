@@ -1,14 +1,29 @@
 macro(translate_to_absolute_paths result_var sources)
   foreach(file ${sources})
     get_filename_component(file_path ${file} PATH)
+    set(tmp_path)
     if(IS_ABSOLUTE "${file_path}")
-      list(APPEND ${result_var} "${file}")
-    elseif("${file}" MATCHES "\.filelist$")
-      list(APPEND ${result_var} "@${CMAKE_CURRENT_SOURCE_DIR}/${file}")
+      set(tmp_path "${file}")
     else()
-      list(APPEND ${result_var} "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
+      set(tmp_path "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
+    endif()
+
+    if("${file}" MATCHES "\.filelist$")
+      list(APPEND ${result_var} "@${tmp_path}")
+    else()
+      list(APPEND ${result_var} "${tmp_path}")
     endif()
   endforeach()
+endmacro()
+
+macro(host_target result_var)
+  if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+    set(${result_var} "x86_64-apple-macosx10.9")
+  elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
+    set(${result_var} "x86_64-unknown-linux-gnu")
+  else()
+    message(FATAL_ERROR "Unsupported host system: ${CMAKE_SYSTEM_NAME}")
+  endif()
 endmacro()
 
 function(_emit_swiftmodule name)
@@ -36,12 +51,15 @@ function(_emit_swiftmodule name)
     endif()
   endforeach()
 
+  set(target)
+  host_target(target)
+
   add_custom_command(
     OUTPUT ${name}.swiftmodule
     DEPENDS ${ESM_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-module"
-        "-target" "x86_64-apple-macosx10.9"
+        "-target" "${target}"
         "-module-name" "${name}"
         "-sdk" "$ENV{SDKROOT}"
         "-emit-module-path" "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule"
