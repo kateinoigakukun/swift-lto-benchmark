@@ -399,24 +399,68 @@ function(add_llvm_lto_executable name)
 
   get_filename_component(toolchain ${CMAKE_Swift_COMPILER}/../.. ABSOLUTE)
   set(xcode_toolchain /Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr)
-  add_custom_target(${name}
-    DEPENDS ${dependency_targets}
-    COMMAND
-      "ld"
-        ${absolute_link_objects}
-        "-lto_library" "/Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib"
-        ${xcode_toolchain}/lib/swift/clang/lib/darwin/libclang_rt.osx.a
-        -syslibroot /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
-        -lobjc -lSystem -arch x86_64
-        -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility51.a
-        -L ${toolchain}/lib/swift/macosx
-        -L ${xcode_toolchain}/lib/swift
-        -L ${xcode_toolchain}/lib/swift-5.0/macosx/
-        -rpath ${toolchain}/lib/swift/macosx
-        -no_objc_category_merging
-        ${ASLE_LINKER_OPTIONS}
-        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
-  )
+  if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+    add_custom_target(${name}
+      DEPENDS ${dependency_targets}
+      COMMAND
+        "ld"
+          ${absolute_link_objects}
+          "-lto_library" "/Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib"
+          ${xcode_toolchain}/lib/swift/clang/lib/darwin/libclang_rt.osx.a
+          -syslibroot /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
+          -lobjc -lSystem -arch x86_64
+          -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility51.a
+          -L ${toolchain}/lib/swift/macosx
+          -L ${xcode_toolchain}/lib/swift
+          -L ${xcode_toolchain}/lib/swift-5.0/macosx/
+          -rpath ${toolchain}/lib/swift/macosx
+          -no_objc_category_merging
+          ${ASLE_LINKER_OPTIONS}
+          "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
+    )
+  else()
+    add_custom_target(${name}
+      DEPENDS ${dependency_targets}
+      COMMAND
+        "gold.ld"
+          ${absolute_link_objects}
+	  -pie -z relro --hash-style=gnu
+          --build-id --eh-frame-hdr
+          -m elf_x86_64 -dynamic-linker
+          /lib64/ld-linux-x86-64.so.2
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/Scrt1.o
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/crtbeginS.o
+	  -L${SWIFT_BUILD_DIR}/lib/swift/linux
+          -L/usr/bin/../lib/gcc/x86_64-linux-gnu/9
+          -L/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu
+          -L/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../lib64
+          -L/lib/x86_64-linux-gnu
+          -L/lib/../lib64
+          -L/usr/lib/x86_64-linux-gnu
+          -L/usr/lib/../lib64
+          -L/usr/lib/x86_64-linux-gnu/../../lib64
+          -L/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../..
+          -L/usr/lib/llvm-9/bin/../lib
+          -L/lib -L/usr/lib
+          -rpath ${SWIFT_BUILD_DIR}/lib/swift/linux
+          ${SWIFT_BUILD_DIR}/lib/swift/linux/x86_64/swiftrt.o
+          -lswiftSwiftOnoneSupport
+          -lswiftCore
+          -lgcc
+          --as-needed
+          -lgcc_s
+	  --no-as-needed
+          -lc -lgcc
+          --as-needed
+          -lgcc_s
+          --no-as-needed
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/crtendS.o
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+          ${ASLE_LINKER_OPTIONS}
+          "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
+    )
+  endif()
 endfunction()
 
 
@@ -491,21 +535,65 @@ function(add_swift_llvm_lto_executable name)
 
   get_filename_component(toolchain ${CMAKE_Swift_COMPILER}/../.. ABSOLUTE)
   set(xcode_toolchain /Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr)
-  add_custom_target(${name}
-    DEPENDS ${dependency_targets}
-    COMMAND
-      "ld"
-        ${absolute_link_objects}
-        "-lto_library" "/Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib"
-        ${xcode_toolchain}/lib/swift/clang/lib/darwin/libclang_rt.osx.a
-        -syslibroot /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
-        -lobjc -lSystem -arch x86_64
-        -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility51.a
-        -L ${toolchain}/lib/swift/macosx
-        -L ${xcode_toolchain}/lib/swift
-        -L ${xcode_toolchain}/lib/swift-5.0/macosx/
-        -no_objc_category_merging
-        ${ASLE_LINKER_OPTIONS}
-        "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
-  )
+  if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+    add_custom_target(${name}
+      DEPENDS ${dependency_targets}
+      COMMAND
+        "ld"
+          ${absolute_link_objects}
+          "-lto_library" "/Applications/Xcode-12-beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib"
+          ${xcode_toolchain}/lib/swift/clang/lib/darwin/libclang_rt.osx.a
+          -syslibroot /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
+          -lobjc -lSystem -arch x86_64
+          -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility51.a
+          -L ${toolchain}/lib/swift/macosx
+          -L ${xcode_toolchain}/lib/swift
+          -L ${xcode_toolchain}/lib/swift-5.0/macosx/
+          -no_objc_category_merging
+          ${ASLE_LINKER_OPTIONS}
+          "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
+    )
+  else()
+    add_custom_target(${name}
+      DEPENDS ${dependency_targets}
+      COMMAND
+        "gold.ld"
+          ${absolute_link_objects}
+	  -pie -z relro --hash-style=gnu
+          --build-id --eh-frame-hdr
+          -m elf_x86_64 -dynamic-linker
+          /lib64/ld-linux-x86-64.so.2
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/Scrt1.o
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crti.o
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/crtbeginS.o
+	  -L${SWIFT_BUILD_DIR}/lib/swift/linux
+          -L/usr/bin/../lib/gcc/x86_64-linux-gnu/9
+          -L/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu
+          -L/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../lib64
+          -L/lib/x86_64-linux-gnu
+          -L/lib/../lib64
+          -L/usr/lib/x86_64-linux-gnu
+          -L/usr/lib/../lib64
+          -L/usr/lib/x86_64-linux-gnu/../../lib64
+          -L/usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../..
+          -L/usr/lib/llvm-9/bin/../lib
+          -L/lib -L/usr/lib
+          -rpath ${SWIFT_BUILD_DIR}/lib/swift/linux
+          ${SWIFT_BUILD_DIR}/lib/swift/linux/x86_64/swiftrt.o
+          -lswiftSwiftOnoneSupport
+          -lswiftCore
+          -lgcc
+          --as-needed
+          -lgcc_s
+	  --no-as-needed
+          -lc -lgcc
+          --as-needed
+          -lgcc_s
+          --no-as-needed
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/crtendS.o
+          /usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/crtn.o
+          ${ASLE_LINKER_OPTIONS}
+          "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
+    )
+  endif()
 endfunction()

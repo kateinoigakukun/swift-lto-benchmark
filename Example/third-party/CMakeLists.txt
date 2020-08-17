@@ -92,35 +92,65 @@ endif()
 # stdlib
 configure_file(swift-stdlib.filelist.in ${CMAKE_CURRENT_BINARY_DIR}/swift-stdlib.filelist)
 set(Swift_sources ${CMAKE_CURRENT_BINARY_DIR}/swift-stdlib.filelist)
-set(Swift_compile_options
-  -resource-dir ${SWIFT_BUILD_DIR}/lib/swift
-  -D INTERNAL_CHECKS_ENABLED
-  -D SWIFT_ENABLE_RUNTIME_FUNCTION_COUNTERS
-  -D SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING
-  -module-cache-path ${SWIFT_BUILD_DIR}/module-cache
-  -enable-objc-interop
-  -disable-objc-attr-requires-foundation-module
-  -enable-library-evolution
-  -enforce-exclusivity=unchecked
-  -nostdimport
-  -parse-stdlib
-  -group-info-path
-  ${SWIFT_SOURCE_DIR}/stdlib/public/core/GroupInfo.json
-  -swift-version 5
-  -runtime-compatibility-version none
-  -disable-autolinking-runtime-compatibility-dynamic-replacements
-  -warn-swift3-objc-inference-complete
-  -verify-syntax-tree
-  -Xllvm -sil-inline-generics
-  -Xllvm -sil-partial-specialization
-  -enable-experimental-concise-pound-file
-  -Xcc -DswiftCore_EXPORTS
-  -warn-implicit-overrides
-  -module-link-name swiftCore
-  -whole-module-optimization
-  -save-optimization-record=bitstream
-  -parse-as-library
-  -I ${SWIFT_BUILD_DIR}/lib/swift/macosx)
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+  set(Swift_compile_options
+    -resource-dir ${SWIFT_BUILD_DIR}/lib/swift
+    -D INTERNAL_CHECKS_ENABLED
+    -D SWIFT_ENABLE_RUNTIME_FUNCTION_COUNTERS
+    -D SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING
+    -module-cache-path ${SWIFT_BUILD_DIR}/module-cache
+    -enable-objc-interop
+    -disable-objc-attr-requires-foundation-module
+    -enable-library-evolution
+    -enforce-exclusivity=unchecked
+    -nostdimport
+    -parse-stdlib
+    -group-info-path
+    ${SWIFT_SOURCE_DIR}/stdlib/public/core/GroupInfo.json
+    -swift-version 5
+    -runtime-compatibility-version none
+    -disable-autolinking-runtime-compatibility-dynamic-replacements
+    -warn-swift3-objc-inference-complete
+    -verify-syntax-tree
+    -Xllvm -sil-inline-generics
+    -Xllvm -sil-partial-specialization
+    -enable-experimental-concise-pound-file
+    -Xcc -DswiftCore_EXPORTS
+    -warn-implicit-overrides
+    -module-link-name swiftCore
+    -whole-module-optimization
+    -save-optimization-record=bitstream
+    -parse-as-library
+    -I ${SWIFT_BUILD_DIR}/lib/swift/macosx)
+else()
+  set(Swift_compile_options
+    -resource-dir ${SWIFT_BUILD_DIR}/lib/swift
+    -D INTERNAL_CHECKS_ENABLED
+    -D SWIFT_ENABLE_RUNTIME_FUNCTION_COUNTERS
+    -D SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING
+    -module-cache-path ${SWIFT_BUILD_DIR}/module-cache
+    -enable-library-evolution
+    -enforce-exclusivity=unchecked
+    -nostdimport
+    -parse-stdlib
+    -module-name Swift
+    -group-info-path
+    ${SWIFT_SOURCE_DIR}/stdlib/public/core/GroupInfo.json
+    -swift-version 5
+    -runtime-compatibility-version none
+    -disable-autolinking-runtime-compatibility-dynamic-replacements
+    -warn-swift3-objc-inference-complete
+    -verify-syntax-tree
+    -Xllvm -sil-inline-generics
+    -Xllvm -sil-partial-specialization
+    -enable-experimental-concise-pound-file
+    -Xcc -DswiftCore_EXPORTS
+    -warn-implicit-overrides
+    -module-link-name swiftCore
+    -whole-module-optimization
+    -parse-as-library
+    -I ${SWIFT_BUILD_DIR}/lib/swift/linux/x86_64)
+endif()
 set(Swift_args Swift
     SOURCES ${Swift_sources}
     COMPILE_OPTIONS ${Swift_compile_options})
