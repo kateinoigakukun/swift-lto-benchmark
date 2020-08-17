@@ -13,6 +13,7 @@ fi
 
 set -e
 SWIFTC=$2
+CLANG="$(dirname $SWIFTC)/clang"
 VARIANT=$1
 ROOT_PATH="$(cd "$(dirname $0)/../" && pwd)"
 
@@ -63,7 +64,8 @@ cmake_options() {
 mkdir -p "${ROOT_PATH}/build/${VARIANT}"
 pushd "${ROOT_PATH}/build/${VARIANT}"
 cmake ../../ -GNinja $(cmake_options $VARIANT) \
-     -DCMAKE_Swift_COMPILER=$SWIFTC
+     -DCMAKE_Swift_COMPILER=$SWIFTC \
+     -DCMAKE_C_COMPILER=$CLANG
 if [[ ! "${SKIP_BUILD}" ]]; then
     ninja Benchmark
     ninja examples
