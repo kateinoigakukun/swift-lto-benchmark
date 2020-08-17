@@ -13,7 +13,11 @@ fi
 
 set -e
 SWIFTC=$2
-CLANG="$(dirname $SWIFTC)/clang"
+if [[ "$(which clang)" ]]; then
+  CLANG="$(which clang)"
+else
+  CLANG="$(dirname $SWIFTC)/clang"
+fi
 VARIANT=$1
 ROOT_PATH="$(cd "$(dirname $0)/../" && pwd)"
 
@@ -66,7 +70,8 @@ pushd "${ROOT_PATH}/build/${VARIANT}"
 cmake ../../ -GNinja $(cmake_options $VARIANT) \
      -DCMAKE_Swift_COMPILER=$SWIFTC \
      -DCMAKE_C_COMPILER=$CLANG \
-     -DSWIFT_BUILD_DIR=$SWIFT_BUILD_DIR
+     -DSWIFT_BUILD_DIR=$SWIFT_BUILD_DIR \
+     -DLLVM_BUILD_DIR=$LLVM_BUILD_DIR
 if [[ ! "${SKIP_BUILD}" ]]; then
     ninja Benchmark
     ninja examples
