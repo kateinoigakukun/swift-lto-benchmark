@@ -179,8 +179,8 @@ function(_lower_and_optimize_sib_to_object target)
   set(compile_options)
   get_target_property(compile_options "${lto_target}" SWIFT_COMPILE_OPTIONS)
 
-  set(target)
-  host_target(target)
+  set(frontend_target)
+  host_target(frontend_target)
   set(options)
   platform_options(options)
 
@@ -188,7 +188,7 @@ function(_lower_and_optimize_sib_to_object target)
     DEPENDS ${LOSO_MERGED_SUMMARY} ${lto_target}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-c" "${sib_path}"
-        "-target" "${target}"
+        "-target" "${frontend_target}"
 	"${options}"
         "-sdk" "$ENV{SDKROOT}"
         "-module-summary-path"
@@ -479,8 +479,8 @@ function(_lower_and_optimize_sib_to_bc target)
   set(compile_options)
   get_target_property(compile_options "${lto_target}" SWIFT_COMPILE_OPTIONS)
 
-  set(target)
-  host_target(target)
+  set(frontend_target)
+  host_target(frontend_target)
   set(options)
   platform_options(options)
 
@@ -488,7 +488,7 @@ function(_lower_and_optimize_sib_to_bc target)
     DEPENDS ${LOSB_MERGED_SUMMARY} ${lto_target}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-bc" "${sib_path}"
-        "-target" "${target}"
+        "-target" "${frontend_target}"
         "${options}"
         "-sdk" "$ENV{SDKROOT}"
         "-lto=llvm-full"
