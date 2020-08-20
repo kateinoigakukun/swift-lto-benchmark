@@ -410,6 +410,7 @@ function(add_llvm_lto_executable name)
           -syslibroot /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
           -lobjc -lSystem -arch x86_64
           -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility51.a
+          -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility50.a
           -L ${toolchain}/lib/swift/macosx
           -L ${xcode_toolchain}/lib/swift
           -L ${xcode_toolchain}/lib/swift-5.0/macosx/
@@ -546,6 +547,7 @@ function(add_swift_llvm_lto_executable name)
           -syslibroot /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
           -lobjc -lSystem -arch x86_64
           -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility51.a
+          -force_load ${toolchain}/lib/swift/macosx/libswiftCompatibility50.a
           -L ${toolchain}/lib/swift/macosx
           -L ${xcode_toolchain}/lib/swift
           -L ${xcode_toolchain}/lib/swift-5.0/macosx/
