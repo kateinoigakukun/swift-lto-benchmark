@@ -203,6 +203,9 @@ function(_lower_and_optimize_sib_to_object target)
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-sil" "${sib_path}"
         "-module-name" "${target}"
+        "-target" "${frontend_target}"
+	"${options}"
+        "-sdk" "$ENV{SDKROOT}"
         "-module-summary-path"
         "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
         "-disable-diagnostic-passes"
@@ -215,6 +218,9 @@ function(_lower_and_optimize_sib_to_object target)
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-ir" "${sib_path}"
         "-module-name" "${target}"
+        "-target" "${frontend_target}"
+	"${options}"
+        "-sdk" "$ENV{SDKROOT}"
         "-module-summary-path"
         "${CMAKE_CURRENT_BINARY_DIR}/${LOSO_MERGED_SUMMARY}"
         "-disable-diagnostic-passes"
