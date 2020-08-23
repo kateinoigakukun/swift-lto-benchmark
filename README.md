@@ -3,7 +3,7 @@
 ## Build
 
 ```sh
-$ ./utils/build-script path/to/swiftc
+$ ./utils/build-all.py path/to/swiftc
 ```
 
 
