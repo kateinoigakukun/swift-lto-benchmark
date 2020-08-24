@@ -39,7 +39,7 @@ set(RxSwiftExample_args RxSwiftExample
 set(SwiftNumericsExample_sources SwiftNumericsExample.swift)
 set(SwiftNumericsExample_linker_options
   ${benchmark_linker_options}
-  "-rpath" "/Users/kateinoigakukun/projects/swift-source-2/build/Ninja-ReleaseAssert/swift-macosx-x86_64/./lib/swift/macosx/x86_64")
+  "-rpath" "${SWIFT_BUILD_DIR}/lib/swift/macosx/x86_64")
 set(SwiftNumericsExample_args SwiftNumericsExample
   SOURCES ${SwiftNumericsExample_sources}
   SWIFT_MODULE_DEPENDS ComplexModule RealModule
