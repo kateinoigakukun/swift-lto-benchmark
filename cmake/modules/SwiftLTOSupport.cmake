@@ -35,15 +35,12 @@ function(_emit_swift_lto_intermediate_files name)
     endif()
   endforeach()
 
-  set(target)
-  host_target(target)
-
   add_custom_command(
     OUTPUT ${lto_intermediate_files}
     DEPENDS ${ESLIF_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-sib"
-        "-target" "${target}"
+        "-target" "${CMAKE_SWIFT_TARGET}"
         "${CMAKE_SHARED_SWIFT_FLAGS}"
         "-module-name" "${name}"
         "-sdk" "$ENV{SDKROOT}"
@@ -180,14 +177,11 @@ function(_lower_and_optimize_sib_to_object target)
   set(compile_options)
   get_target_property(compile_options "${lto_target}" SWIFT_COMPILE_OPTIONS)
 
-  set(frontend_target)
-  host_target(frontend_target)
-
   add_custom_target(${target}.o
     DEPENDS ${LOSO_MERGED_SUMMARY} ${lto_target}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-c" "${sib_path}"
-        "-target" "${frontend_target}"
+        "-target" "${CMAKE_SWIFT_TARGET}"
         "${CMAKE_SHARED_SWIFT_FLAGS}"
         "-sdk" "$ENV{SDKROOT}"
         "-module-summary-path"
@@ -202,7 +196,7 @@ function(_lower_and_optimize_sib_to_object target)
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-sil" "${sib_path}"
         "-module-name" "${target}"
-        "-target" "${frontend_target}"
+        "-target" "${CMAKE_SWIFT_TARGET}"
 	"${options}"
         "-sdk" "$ENV{SDKROOT}"
         "-module-summary-path"
@@ -217,7 +211,7 @@ function(_lower_and_optimize_sib_to_object target)
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-ir" "${sib_path}"
         "-module-name" "${target}"
-        "-target" "${frontend_target}"
+        "-target" "${CMAKE_SWIFT_TARGET}"
 	"${options}"
         "-sdk" "$ENV{SDKROOT}"
         "-module-summary-path"
@@ -268,14 +262,11 @@ function(add_swift_lto_executable name)
     list(APPEND driver_options "-Xlinker" "${option}")
   endforeach()
 
-  set(target)
-  host_target(target)
-
   add_custom_target(${name}
     DEPENDS ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}"
-        "-target" "${target}"
+        "-target" "${CMAKE_SWIFT_TARGET}"
         ${absolute_link_objects}
         ${driver_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"
@@ -427,14 +418,11 @@ function(_lower_and_optimize_sib_to_bc target)
   set(compile_options)
   get_target_property(compile_options "${lto_target}" SWIFT_COMPILE_OPTIONS)
 
-  set(frontend_target)
-  host_target(frontend_target)
-
   add_custom_target(${target}.bc
     DEPENDS ${LOSB_MERGED_SUMMARY} ${lto_target}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-bc" "${sib_path}"
-        "-target" "${frontend_target}"
+        "-target" "${CMAKE_SWIFT_TARGET}"
         "${CMAKE_SHARED_SWIFT_FLAGS}"
         "-sdk" "$ENV{SDKROOT}"
         "-lto=llvm-full"

@@ -1,4 +1,5 @@
 set(CMAKE_SHARED_SWIFT_FLAGS "" CACHE STRING "The shared Swift flags")
+set(CMAKE_SWIFT_TARGET "" CACHE STRING "The Swift compile target")
 
 macro(translate_to_absolute_paths result_var sources)
   foreach(file ${sources})
@@ -16,16 +17,6 @@ macro(translate_to_absolute_paths result_var sources)
       list(APPEND ${result_var} "${tmp_path}")
     endif()
   endforeach()
-endmacro()
-
-macro(host_target result_var)
-  if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
-    set(${result_var} "x86_64-apple-macosx10.9")
-  elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
-    set(${result_var} "x86_64-unknown-linux-gnu")
-  else()
-    message(FATAL_ERROR "Unsupported host system: ${CMAKE_SYSTEM_NAME}")
-  endif()
 endmacro()
 
 function(_emit_swiftmodule name)
@@ -53,15 +44,12 @@ function(_emit_swiftmodule name)
     endif()
   endforeach()
 
-  set(target)
-  host_target(target)
-
   add_custom_command(
     OUTPUT ${name}.swiftmodule
     DEPENDS ${ESM_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-module"
-        "-target" "${target}"
+        "-target" "${CMAKE_SWIFT_TARGET}"
         "-module-name" "${name}"
         "${CMAKE_SHARED_SWIFT_FLAGS}"
         "-sdk" "$ENV{SDKROOT}"
@@ -99,14 +87,11 @@ function(_emit_swift_object name)
     endif()
   endforeach()
 
-  set(target)
-  host_target(target)
-
   add_custom_target(${name}.o
     DEPENDS ${ESO_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-c"
-        "-target" "${target}"
+        "-target" "${CMAKE_SWIFT_TARGET}"
         "${CMAKE_SHARED_SWIFT_FLAGS}"
         "-whole-module-optimization"
         "-module-name" "${name}"
@@ -196,14 +181,11 @@ function(add_swift_executable name)
     list(APPEND driver_options "-Xlinker" "${option}")
   endforeach()
 
-  set(target)
-  host_target(target)
-
   add_custom_target(${name}
     DEPENDS ${link_objects}
     COMMAND
       "${CMAKE_Swift_COMPILER}"
-        "-target" "${target}"
+        "-target" "${CMAKE_SWIFT_TARGET}"
         ${absolute_link_objects}
         ${driver_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"

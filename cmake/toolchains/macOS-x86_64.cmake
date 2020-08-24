@@ -19,3 +19,5 @@ set(CMAKE_SWIFT_LINKER_FLAGS
     -platform_version macos 10.9.0 10.9.0
     -arch x86_64
 )
+
+set(CMAKE_SWIFT_TARGET x86_64-apple-macosx10.9)
