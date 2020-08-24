@@ -1,6 +1,13 @@
 
 import Foundation
 
+struct MessageError: LocalizedError {
+  let errorDescription: String?
+  init(_ message: String) {
+    errorDescription = message
+  }
+}
+
 fileprivate func buildDirectory(variant: Variant) -> URL {
   let dirName = "\(variant.opt)\(variant.lto.directorySuffix)"
   return projectDirectory.appendingPathComponent("build/\(dirName)")
@@ -26,8 +33,39 @@ func buildTime(target: Target, variant: Variant) throws -> UInt64 {
 
 func artifactSize(target: Target, variant: Variant) throws -> UInt64 {
   let pathURL = artifactPath(target: target, variant: variant)
-  let attr = try FileManager.default.attributesOfItem(atPath: pathURL.path)
-  return attr[FileAttributeKey.size] as! UInt64
+  let process = Process()
+  let pipe = Pipe()
+  process.launchPath = "/usr/bin/env"
+  process.arguments = ["size", pathURL.path]
+  process.launch()
+  process.waitUntilExit()
+  process.standardOutput = pipe
+  let stdoutData = pipe.fileHandleForReading.readDataToEndOfFile()
+  guard let output = String(data: stdoutData, encoding: .utf8) else {
+    throw MessageError("Failed to decode output from size command")
+  }
+  let lines = output.split(separator: "\n")
+  guard lines.count >= 2 else {
+    throw MessageError("Invalid output from size command '\(output)'")
+  }
+
+  let headers = lines[0].split(separator: "\t")
+  let values = lines[1].split(separator: "\t")
+  let value: Substring
+  #if os(macOS)
+  guard let textIndex = headers.firstIndex(where: { $0.contains("__TEXT") }),
+        textIndex == headers.startIndex else {
+    throw MessageError("Unexpected header output from size command '\(output)'")
+  }
+  #else
+  guard let textIndex = headers.firstIndex(where: { $0.contains("text") }),
+        textIndex == headers.startIndex else {
+    throw MessageError("Unexpected header output from size command '\(output)'")
+  }
+
+  #endif
+  value = values[textIndex].filter { $0.isNumber }
+  return UInt64(value)!
 }
 
 func humanReadableByteCount(bytes: UInt64) -> String {
