@@ -11,15 +11,15 @@ set(CMAKE_SWIFT_LINKER_FLAGS
     /usr/lib/x86_64-linux-gnu/Scrt1.o
     /usr/lib/x86_64-linux-gnu/crti.o
     /usr/lib/gcc/x86_64-linux-gnu/9/crtbeginS.o
-    -L${SWIFT_BUILD_DIR}/lib/swift/linux
-    -L/usr/lib/gcc/x86_64-linux-gnu/9
-    -L/usr/lib/x86_64-linux-gnu
-    -L/usr/lib64
-    -L/lib/x86_64-linux-gnu
+    -L/lib
     -L/lib64
     -L/usr/lib
+    -L/usr/lib64
+    -L/usr/lib/gcc/x86_64-linux-gnu/9
+    -L/usr/lib/x86_64-linux-gnu
+    -L/lib/x86_64-linux-gnu
     -L/usr/lib/llvm-9/lib
-    -L/lib
+    -L${SWIFT_BUILD_DIR}/lib/swift/linux
     -rpath ${SWIFT_BUILD_DIR}/lib/swift/linux
     ${SWIFT_BUILD_DIR}/lib/swift/linux/x86_64/swiftrt.o
     -lswiftSwiftOnoneSupport

@@ -6,7 +6,7 @@ set(TARGET_SDK /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/Mac
 set(CMAKE_SWIFT_LINKER /usr/bin/ld)
 set(CMAKE_SWIFT_LINKER_FLAGS
     -lto_library ${XCODE_TOOLCHAIN}/lib/libLTO.dylib
-    ${XCODE_TOOLCHAIN}/lib/swift/clang/lib/darwin/libclang_rt.osx.a
+    ${LLVM_BUILD_DIR}/lib/clang/10.0.0/lib/darwin/libclang_rt.osx.a
     -syslibroot ${TARGET_SDK}
     -lobjc -lSystem
     -force_load ${SWIFT_TOOLCHAIN}/lib/swift/macosx/libswiftCompatibility51.a
