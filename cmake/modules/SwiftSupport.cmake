@@ -1,5 +1,5 @@
 set(CMAKE_SHARED_SWIFT_FLAGS "" CACHE STRING "The shared Swift flags")
-set(CMAKE_SWIFT_TARGET "" CACHE STRING "The Swift compile target")
+set(CMAKE_Swift_COMPILER_TARGET "" CACHE STRING "The Swift compile target")
 
 macro(translate_to_absolute_paths result_var sources)
   foreach(file ${sources})
@@ -49,7 +49,7 @@ function(_emit_swiftmodule name)
     DEPENDS ${ESM_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-module"
-        "-target" "${CMAKE_SWIFT_TARGET}"
+        "-target" "${CMAKE_Swift_COMPILER_TARGET}"
         "-module-name" "${name}"
         "${CMAKE_SHARED_SWIFT_FLAGS}"
         "-sdk" "$ENV{SDKROOT}"
@@ -91,7 +91,7 @@ function(_emit_swift_object name)
     DEPENDS ${ESO_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-c"
-        "-target" "${CMAKE_SWIFT_TARGET}"
+        "-target" "${CMAKE_Swift_COMPILER_TARGET}"
         "${CMAKE_SHARED_SWIFT_FLAGS}"
         "-whole-module-optimization"
         "-module-name" "${name}"
@@ -185,7 +185,7 @@ function(add_swift_executable name)
     DEPENDS ${link_objects}
     COMMAND
       "${CMAKE_Swift_COMPILER}"
-        "-target" "${CMAKE_SWIFT_TARGET}"
+        "-target" "${CMAKE_Swift_COMPILER_TARGET}"
         ${absolute_link_objects}
         ${driver_options}
         "-o" "${CMAKE_CURRENT_BINARY_DIR}/${name}"

@@ -34,4 +34,4 @@ set(CMAKE_SWIFT_LINKER_FLAGS
 )
 
 set(CMAKE_SHARED_SWIFT_FLAGS -disable-objc-interop)
-set(CMAKE_SWIFT_TARGET x86_64-unknown-linux-gnu)
+set(CMAKE_Swift_COMPILER_TARGET x86_64-unknown-linux-gnu)
