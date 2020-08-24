@@ -12,6 +12,10 @@ set(SWIFT_BUILD_DIR "" CACHE BOOL "Swift project build directory like path/to/Ni
 set(LLVM_BUILD_DIR "" CACHE BOOL "LLVM project build directory like path/to/Ninja-ReleaseAssert/llvm-macosx-x86_64")
 set(SWIFT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Example/third-party/swift)
 
+include(SwiftSupport)
+include(SwiftLTOSupport)
+include(${CMAKE_TOOLCHAIN_FILE})
+
 add_subdirectory(lib)
 add_subdirectory(Example)
 

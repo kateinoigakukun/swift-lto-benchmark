@@ -65,13 +65,25 @@ cmake_options() {
     echo "-DSWIFT_LTO=$(is_swift_lto $1) -DLLVM_LTO=$(is_llvm_lto $1) -DCMAKE_BUILD_TYPE=$(cmake_build_type $1)"
 }
 
+cmake_toolchain() {
+    local toolchains="${ROOT_PATH}/cmake/toolchains"
+    if [[ "$(uname)" == "Linux" ]]; then
+        echo "${toolchains}/Linux-x86_64.cmake"
+    elif [[ "$(uname)" == "Darwin" ]]; then
+        echo "${toolchains}/macOS-x86_64.cmake"
+    else
+        exit 1
+    fi
+}
+
 mkdir -p "${ROOT_PATH}/build/${VARIANT}"
 pushd "${ROOT_PATH}/build/${VARIANT}"
 cmake ../../ -GNinja $(cmake_options $VARIANT) \
      -DCMAKE_Swift_COMPILER=$SWIFTC \
      -DCMAKE_C_COMPILER=$CLANG \
      -DSWIFT_BUILD_DIR=$SWIFT_BUILD_DIR \
-     -DLLVM_BUILD_DIR=$LLVM_BUILD_DIR
+     -DLLVM_BUILD_DIR=$LLVM_BUILD_DIR \
+     -DCMAKE_TOOLCHAIN_FILE=$(cmake_toolchain)
 if [[ ! "${SKIP_BUILD}" ]]; then
     ninja Benchmark
     ninja examples
