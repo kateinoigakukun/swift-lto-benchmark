@@ -32,3 +32,5 @@ set(CMAKE_SWIFT_LINKER_FLAGS
     /usr/lib/gcc/x86_64-linux-gnu/9/crtendS.o
     /usr/lib/x86_64-linux-gnu/crtn.o
 )
+
+set(CMAKE_SHARED_SWIFT_FLAGS -disable-objc-interop)

@@ -1,3 +1,5 @@
+set(CMAKE_SHARED_SWIFT_FLAGS "" CACHE STRING "The shared Swift flags")
+
 macro(translate_to_absolute_paths result_var sources)
   foreach(file ${sources})
     get_filename_component(file_path ${file} PATH)
@@ -21,16 +23,6 @@ macro(host_target result_var)
     set(${result_var} "x86_64-apple-macosx10.9")
   elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
     set(${result_var} "x86_64-unknown-linux-gnu")
-  else()
-    message(FATAL_ERROR "Unsupported host system: ${CMAKE_SYSTEM_NAME}")
-  endif()
-endmacro()
-
-macro(platform_options result_var)
-  if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
-    set(${result_var} "")
-  elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
-    set(${result_var} "-disable-objc-interop")
   else()
     message(FATAL_ERROR "Unsupported host system: ${CMAKE_SYSTEM_NAME}")
   endif()
@@ -63,8 +55,6 @@ function(_emit_swiftmodule name)
 
   set(target)
   host_target(target)
-  set(options)
-  platform_options(options)
 
   add_custom_command(
     OUTPUT ${name}.swiftmodule
@@ -73,7 +63,7 @@ function(_emit_swiftmodule name)
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-module"
         "-target" "${target}"
         "-module-name" "${name}"
-        "${options}"
+        "${CMAKE_SHARED_SWIFT_FLAGS}"
         "-sdk" "$ENV{SDKROOT}"
         "-emit-module-path" "${CMAKE_CURRENT_BINARY_DIR}/${name}.swiftmodule"
         ${absolute_source_files} ${compile_options}
@@ -111,15 +101,13 @@ function(_emit_swift_object name)
 
   set(target)
   host_target(target)
-  set(options)
-  platform_options(options)
 
   add_custom_target(${name}.o
     DEPENDS ${ESO_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-c"
         "-target" "${target}"
-        "${options}"
+        "${CMAKE_SHARED_SWIFT_FLAGS}"
         "-whole-module-optimization"
         "-module-name" "${name}"
         "-sdk" "$ENV{SDKROOT}"
