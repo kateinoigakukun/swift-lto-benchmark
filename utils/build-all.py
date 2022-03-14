@@ -11,15 +11,23 @@ class Context:
         self.swiftc = swiftc
 
     def work(self, variant):
-        cmd = [self.build_script, variant, self.swiftc]
+        cmd = [self.build_script, variant, self.swiftc, "-n"]
+        print("Execute", cmd)
+        proc = subprocess.run(cmd)
+        cmd = ["ninja", "-C", f"build/{variant}", "Benchmark", "SwiftyJSONExample"]
         print("Execute", cmd)
         proc = subprocess.run(cmd)
 
 def main():
+    # variants = [
+    #     "Onone", "Onone-swift-lto", "Onone-llvm-lto", "Onone-swift-llvm-lto",
+    #     "O"    , "O-swift-lto"    , "O-llvm-lto"    , "O-swift-llvm-lto"    ,
+    #     "Osize", "Osize-swift-lto", "Osize-llvm-lto", "Osize-swift-llvm-lto",
+    # ]
     variants = [
-        "Onone", "Onone-swift-lto", "Onone-llvm-lto", "Onone-swift-llvm-lto",
-        "O"    , "O-swift-lto"    , "O-llvm-lto"    , "O-swift-llvm-lto"    ,
-        "Osize", "Osize-swift-lto", "Osize-llvm-lto", "Osize-swift-llvm-lto",
+        "Onone", "Onone-llvm-lto",
+        "O"    , "O-llvm-lto"    ,
+        "Osize", "Osize-llvm-lto",
     ]
 
     swiftc = sys.argv[1]
