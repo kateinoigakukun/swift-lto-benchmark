@@ -303,6 +303,10 @@ function(_emit_swift_llvm_bc name)
     endif()
   endforeach()
 
+  if(ENABLE_HERMETIC_SEAL)
+    list(APPEND compile_options "-experimental-hermetic-seal-at-link")
+  endif()
+
   add_custom_target("${name}.bc"
     DEPENDS ${ESLB_SOURCES} ${dependency_targets}
     COMMAND
@@ -345,6 +349,11 @@ function(add_swift_llvm_lto_library name)
       list(APPEND dependency_targets "${dependency}")
     endif()
   endforeach()
+
+  if(ENABLE_HERMETIC_SEAL)
+    list(APPEND compile_options "-experimental-hermetic-seal-at-link")
+  endif()
+
 
   _emit_swiftmodule(${name}
     SOURCES ${ASLL_SOURCES}
