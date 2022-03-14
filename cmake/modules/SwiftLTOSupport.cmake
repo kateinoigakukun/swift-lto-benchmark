@@ -311,6 +311,7 @@ function(_emit_swift_llvm_bc name)
     DEPENDS ${ESLB_SOURCES} ${dependency_targets}
     COMMAND
       "${CMAKE_Swift_COMPILER}" "-frontend" "-emit-bc"
+        "-target" "${CMAKE_Swift_COMPILER_TARGET}"
         "-module-name" "${name}"
         "-sdk" "$ENV{SDKROOT}"
         "-lto=llvm-full"

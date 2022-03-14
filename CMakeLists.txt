@@ -21,10 +21,11 @@ add_subdirectory(lib)
 add_subdirectory(Example)
 
 set(EXAMPLE_TARGETS
-  SwiftSyntaxExample
+  # SwiftSyntaxExample
   RxSwiftExample
-  SwiftStdlibExample
-  SwiftNumericsExample)
+  # SwiftStdlibExample
+  # SwiftNumericsExample
+  )
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
   list(APPEND EXAMPLE_TARGETS SwiftyJSONExample)
 endif()

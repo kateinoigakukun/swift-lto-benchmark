@@ -5,12 +5,12 @@ set(TARGET_SDK /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/Mac
 
 set(CMAKE_SWIFT_LINKER /usr/bin/ld)
 set(CMAKE_SWIFT_LINKER_FLAGS
-    -lto_library ${XCODE_TOOLCHAIN}/lib/libLTO.dylib
-    ${LLVM_BUILD_DIR}/lib/clang/10.0.0/lib/darwin/libclang_rt.osx.a
+    -lto_library ${LLVM_BUILD_DIR}/lib/libLTO.dylib
+    # ${LLVM_BUILD_DIR}/lib/clang/10.0.0/lib/darwin/libclang_rt.osx.a
     -syslibroot ${TARGET_SDK}
-    -lobjc -lSystem
-    -force_load ${SWIFT_TOOLCHAIN}/lib/swift/macosx/libswiftCompatibility51.a
-    -force_load ${SWIFT_TOOLCHAIN}/lib/swift/macosx/libswiftCompatibility50.a
+    # -lobjc -lSystem
+    # -force_load ${SWIFT_TOOLCHAIN}/lib/swift/macosx/libswiftCompatibility51.a
+    # -force_load ${SWIFT_TOOLCHAIN}/lib/swift/macosx/libswiftCompatibility50.a
     -L ${SWIFT_TOOLCHAIN}/lib/swift/macosx
     -L ${XCODE_TOOLCHAIN}/lib/swift
     -L ${XCODE_TOOLCHAIN}/lib/swift-5.0/macosx/
