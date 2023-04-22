@@ -250,6 +250,36 @@ $ ./utils/build-all.py path/to/swiftc
 <table>
 <tr>
    <td rowspan=2>Variant</td>
+   <td colspan=4>Size</td>
+</tr>
+<tr>
+    <td>non-LTO</td>
+    <td>LLVM LTO</td>
+    <td>Hermetic seal</td>
+</tr>
+<tr>
+    <td>Onone</td>
+    <td>310 KB</td>
+    <td>217 KB</td>
+    <td>104 KB</td>
+</tr>
+<tr>
+    <td>O</td>
+    <td>261 KB</td>
+    <td>233 KB</td>
+    <td>71 KB</td>
+</tr>
+<tr>
+    <td>Osize</td>
+    <td>261 KB</td>
+    <td>217 KB</td>
+    <td>71 KB</td>
+</tr>
+</table>
+
+<table>
+<tr>
+   <td rowspan=2>Variant</td>
    <td colspan=4>Build Time</td>
 </tr>
 <tr>
