@@ -304,7 +304,7 @@ function(_emit_swift_llvm_bc name)
   endforeach()
 
   if(ENABLE_HERMETIC_SEAL)
-    list(APPEND compile_options "-experimental-hermetic-seal-at-link")
+    list(APPEND compile_options "-experimental-hermetic-seal-at-link" "-enable-llvm-vfe" "-enable-llvm-wme" "-conditional-runtime-records" "-internalize-at-link")
   endif()
 
   add_custom_target("${name}.bc"
@@ -352,7 +352,7 @@ function(add_swift_llvm_lto_library name)
   endforeach()
 
   if(ENABLE_HERMETIC_SEAL)
-    list(APPEND compile_options "-experimental-hermetic-seal-at-link")
+    list(APPEND compile_options "-experimental-hermetic-seal-at-link" "-enable-llvm-vfe" "-enable-llvm-wme" "-conditional-runtime-records" "-internalize-at-link")
   endif()
 
 

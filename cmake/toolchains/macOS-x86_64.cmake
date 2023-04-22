@@ -5,15 +5,20 @@ set(TARGET_SDK /Applications/Xcode-12-beta3.app/Contents/Developer/Platforms/Mac
 
 set(CMAKE_SWIFT_LINKER /usr/bin/ld)
 set(CMAKE_SWIFT_LINKER_FLAGS
-    -lto_library ${LLVM_BUILD_DIR}/lib/libLTO.dylib
+    -lto_library ${SWIFT_TOOLCHAIN}/lib/libLTO.dylib
     # ${LLVM_BUILD_DIR}/lib/clang/10.0.0/lib/darwin/libclang_rt.osx.a
     -syslibroot ${TARGET_SDK}
-    # -lobjc -lSystem
+    -lobjc -lSystem
     # -force_load ${SWIFT_TOOLCHAIN}/lib/swift/macosx/libswiftCompatibility51.a
     # -force_load ${SWIFT_TOOLCHAIN}/lib/swift/macosx/libswiftCompatibility50.a
     -L ${SWIFT_TOOLCHAIN}/lib/swift/macosx
-    -L ${XCODE_TOOLCHAIN}/lib/swift
-    -L ${XCODE_TOOLCHAIN}/lib/swift-5.0/macosx/
+    -L ${SWIFT_TOOLCHAIN}/lib/swift
+    -L ${SWIFT_TOOLCHAIN}/lib/swift-5.0/macosx/
+    -L/Applications/Xcode-13.4-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib
+    -L/Applications/Xcode-13.4-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/swift
+    -lswiftFoundation
+    -F/Applications/Xcode-13.4-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/
+    -framework Foundation
     -rpath ${SWIFT_TOOLCHAIN}/lib/swift/macosx
     -no_objc_category_merging
     -platform_version macos 10.9.0 10.9.0
